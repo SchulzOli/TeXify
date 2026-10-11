@@ -29,9 +29,9 @@ class CompileError(TexifyError):
     def details(self) -> str:
         parts = [str(self)]
         if self.log:
-            parts += ["", "--- LaTeX-Log ---", self.log]
+            parts += ["", "--- LaTeX log ---", self.log]
         if self.source:
-            parts += ["", "--- Quelltext an der Fehlerstelle ---", self.source]
+            parts += ["", "--- Source at the error ---", self.source]
         return "\n".join(parts)
 
 
@@ -56,18 +56,18 @@ def resolve(cfg: Config, preferred: str | None = None) -> str:
     choice = preferred or os.environ.get("TEXIFY_ENGINE") or cfg.section("build").get("engine", "auto")
     if choice != "auto":
         if choice not in ENGINES:
-            raise TexifyError(f"Unbekannte Engine '{choice}'. Erlaubt: auto, {', '.join(ENGINES)}")
+            raise TexifyError(f"Unknown engine '{choice}'. Allowed: auto, {', '.join(ENGINES)}")
         return choice
     found = available(cfg)
     for engine in ENGINES:
         if found[engine]:
             return engine
     raise TexifyError(
-        "Keine LaTeX-Engine gefunden. Optionen:\n"
-        "  • Tectonic (empfohlen, ein Binary):  https://tectonic-typesetting.github.io\n"
+        "No LaTeX engine found. Options:\n"
+        "  • Tectonic (single binary):  https://tectonic-typesetting.github.io\n"
         "  • TeX Live / MiKTeX (pdflatex, latexmk)\n"
-        "  • Docker:  docker compose build   (Image 'texify:latest')\n"
-        "Prüfen mit: texify doctor"
+        "  • Docker:  docker compose build   (image 'texify:latest')\n"
+        "Check with: texify doctor"
     )
 
 
@@ -102,9 +102,9 @@ def compile_tex(tex: Path, engine: str, cfg: Config) -> Path:
                 stdin=subprocess.DEVNULL,
             )
         except FileNotFoundError:
-            raise TexifyError(f"Engine '{engine}' ist nicht installiert (texify doctor)") from None
+            raise TexifyError(f"Engine '{engine}' is not installed (texify doctor)") from None
         except subprocess.TimeoutExpired:
-            raise CompileError(f"{engine}: Zeitüberschreitung nach {TIMEOUT}s") from None
+            raise CompileError(f"{engine}: timed out after {TIMEOUT}s") from None
         if r.returncode != 0:
             raise _compile_error(engine, tex, r)
     if engine not in ("tectonic", "latexmk", "docker"):
@@ -113,7 +113,7 @@ def compile_tex(tex: Path, engine: str, cfg: Config) -> Path:
             subprocess.run(_commands(engine, tex, cfg)[0], cwd=tex.parent, capture_output=True,
                            timeout=TIMEOUT, stdin=subprocess.DEVNULL)
     if not pdf.is_file():
-        raise CompileError(f"{engine} lief durch, aber es entstand kein PDF ({pdf.name})")
+        raise CompileError(f"{engine} finished but produced no PDF ({pdf.name})")
     return pdf
 
 
@@ -128,7 +128,7 @@ def _compile_error(engine: str, tex: Path, r: subprocess.CompletedProcess) -> Co
     else:
         out = ((r.stdout or "") + "\n" + (r.stderr or "")).strip().splitlines()
         excerpt = "\n".join(out[-30:])
-        message = next((ln for ln in reversed(out) if "error" in ln.lower()), "LaTeX-Fehler")
+        message = next((ln for ln in reversed(out) if "error" in ln.lower()), "LaTeX error")
     source = ""
     # "l.<n> <text>": only show source if line n of the main file really holds
     # <text> (the error may come from a package such as texify.sty)

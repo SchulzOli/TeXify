@@ -1,20 +1,21 @@
 description: >-
-  Bestätigung / Bescheinigung / Nachweis (z. B. Teilnahme-, Praktikums-,
-  Mitglieds- oder Zahlungsbestätigung): Briefkopf, großer Titel, optional
-  hervorgehobene Person, Text aus Markdown, Ort/Datum und Unterschriftszeile.
+  Confirmation / attestation / reference (e.g. certificate of attendance,
+  employment reference, power of attorney, payment confirmation):
+  letterhead, large title, optionally a highlighted person, Markdown text,
+  place/date and signature lines.
 title_from_heading: true
 fields:
-  sender.name: {required: true, description: "Aussteller (texify.toml [defaults.sender])"}
-  title: Titel (Standard 'Bestätigung' oder erste Überschrift "# ...")
-  subtitle: Untertitel
-  person: Name der Person, für die bestätigt wird (hervorgehoben)
-  intro: Satz über dem Namen (Standard 'Hiermit bestätigen wir, dass'; "" = keiner)
-  person_details: Zusatzzeilen zur Person (z. B. Geburtsdatum)
-  logo: Logo-Bilddatei (optional)
-  signature: Bilddatei der Unterschrift (optional)
-  signer: "Unterzeichner: {name, role} (Standard sender.name)"
-  place: Ort (Standard sender.city)
-  date: Datum (Standard heute)
+  sender.name: {required: true, description: "Issuer (texify.toml [defaults.sender])"}
+  title: Title (default 'Confirmation' or the first heading "# ...")
+  subtitle: Subtitle
+  person: Person the document is about (highlighted)
+  intro: Sentence above the name (default 'We hereby confirm that'; "" = none)
+  person_details: Extra lines about the person (e.g. date of birth)
+  logo: Logo image file (optional)
+  signature: Signature image file (optional)
+  signer: "Signatory: {name, role} (default sender.name)"
+  place: Place (default sender.city)
+  date: Date (default today)
 defaults:
   date: today
 headings:

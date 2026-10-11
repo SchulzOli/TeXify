@@ -1,25 +1,25 @@
 ---
 template: confirmation
 sender:
-  name: Musterverein Leipzig e. V.
-  street: Vereinsweg 3
+  name: Sample Association Leipzig
+  street: 3 Club Lane
   zip: "04109"
   city: Leipzig
-  email: vorstand@example.org
-person: Erika Musterfrau
-person_details: geboren am 12.03.1998
+  email: board@example.org
+person: Jordan Sample
+person_details: born 12 March 1998
 signer:
-  name: Max Mustermann
-  role: Vorsitzender
+  name: Alex Example
+  role: Chair
 ---
 
-# Teilnahmebestätigung
+# Certificate of Attendance
 
-am Workshop **„Professionelle Dokumente mit LaTeX“** am 10. Oktober 2026
-(09:00 – 16:00 Uhr, 8 Unterrichtseinheiten) teilgenommen hat.
+attended the workshop **“Professional documents with LaTeX”** on 10 October
+2026 (9 am – 4 pm, 8 teaching units).
 
-Inhalte des Workshops:
+Workshop contents:
 
-- Grundlagen von Markdown und LaTeX
-- Gestaltung mit Vorlagen
-- Automatisierte Erstellung von Rechnungen und Briefen
+- Basics of Markdown and LaTeX
+- Designing with templates
+- Automated creation of invoices and letters

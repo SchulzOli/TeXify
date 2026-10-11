@@ -1,40 +1,39 @@
 ---
 template: invoice
 sender:
-  name: Max Mustermann IT-Beratung
-  street: Musterstraße 1
+  name: Alex Example IT Consulting
+  street: 1 Sample Street
   zip: "04109"
   city: Leipzig
   phone: +49 170 1234567
-  email: rechnung@example.com
+  email: billing@example.com
   tax_id: 231/123/45678
   bank:
-    name: Musterbank Leipzig
+    name: Example Bank
     iban: DE12 3456 7890 1234 5678 90
-    bic: MUSTDEXXX
+    bic: EXMPDEXXX
 recipient: |
-  Beispiel GmbH
-  Buchhaltung
-  Hauptstraße 5
+  Example Ltd.
+  Accounts Payable
+  5 High Street
   10115 Berlin
 number: 2026-017
-customer_number: K-1042
+customer_number: C-1042
 service_period: September 2026
 items:
-  - desc: Beratung Systemarchitektur
-    detail: Workshops vor Ort, 12.–14.09.2026
+  - desc: System architecture consulting
+    detail: On-site workshops, 12–14 Sep 2026
     qty: 16
-    unit: Std.
+    unit: h
     price: 110
-  - desc: Implementierung **CI/CD-Pipeline**
+  - desc: Implementation of a **CI/CD pipeline**
     qty: 1
-    unit: Pausch.
+    unit: flat
     price: 1850
-  - desc: Reisekosten
+  - desc: Travel expenses
     qty: 1
-    unit: Pausch.
+    unit: flat
     price: 214.60
 ---
 
-vielen Dank für Ihren Auftrag. Für die erbrachten Leistungen erlaube ich mir,
-wie folgt zu berechnen:
+Thank you for your order. For the services provided I am charging:

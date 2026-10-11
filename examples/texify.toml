@@ -1,24 +1,24 @@
-# Gemeinsame Vorgaben für alle Beispiele in diesem Ordner (fiktive Daten).
-# Jedes Dokument kann jeden Wert im eigenen Frontmatter überschreiben.
+# Shared defaults for every example in this folder (fictional data).
+# Each document can override any value in its own frontmatter.
 
 [defaults]
-lang = "de"
+lang = "en"
 accent = "1F4E79"
 
 [defaults.sender]
-name = "Max Mustermann"
-street = "Musterstraße 1"
+name = "Alex Example"
+street = "1 Sample Street"
 zip = "04109"
 city = "Leipzig"
 phone = "+49 170 1234567"
-email = "max@example.com"
+email = "alex@example.com"
 web = "example.com"
 tax_id = "231/123/45678"
 
 [defaults.sender.bank]
-name = "Musterbank Leipzig"
+name = "Example Bank"
 iban = "DE12 3456 7890 1234 5678 90"
-bic = "MUSTDEXXX"
+bic = "EXMPDEXXX"
 
 [build]
 out_dir = "pdf"

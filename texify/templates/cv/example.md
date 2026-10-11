@@ -1,41 +1,41 @@
 ---
 template: cv
-name: Max Mustermann
+name: Alex Example
 headline: Solution Architect · Microsoft Dynamics 365 Business Central
 contact:
-  address: Musterstraße 1, 04109 Leipzig
+  address: 1 Sample Street, 04109 Leipzig
   city: Leipzig
   phone: +49 170 1234567
-  email: max@example.com
-  github: maxmustermann
+  email: alex@example.com
+  github: alexexample
 details:
-  Geburtsdatum: 01.01.1995 in Dresden
-  Staatsangehörigkeit: deutsch
+  Date of birth: 1 January 1995
+  Nationality: German
 signature_line: true
 ---
 
-# Berufserfahrung
+# Experience
 
-## 2025 – heute | Solution Architect, Muster IT GmbH
-- (Re-)Design skalierbarer Architekturen für **Business Central**-Lösungen
-- Workshops zu agentischen Workflows, CI/CD und Code-Beiträgen
-- Erstellung einer vollständigen Produktdokumentation
+## 2025 – today | Solution Architect, Sample IT Ltd.
+- (Re)design of scalable architectures for **Business Central** solutions
+- Workshops on agentic workflows, CI/CD and code contributions
+- End-to-end product documentation
 
-## 2022 – 2025 | Solution Engineer, Muster IT GmbH
-- Produktentwicklung: Entwurf, Umsetzung und Optimierung von Softwarelösungen
-- Power-Platform-App mit Power Apps & Power Automate
-- Zertifizierung **MB-820** (Business Central Developer)
+## 2022 – 2025 | Solution Engineer, Sample IT Ltd.
+- Product development: design, implementation and optimisation
+- Power Platform app with Power Apps & Power Automate
+- Certified **MB-820** (Business Central Developer)
 
-# Ausbildung
+# Education
 
 ## 2020 – 2022 | Master of Science, TU Dresden
-Informatik für Geistes- und Sozialwissenschaftler
+Computer Science for the Humanities and Social Sciences
 
-## 2016 – 2020 | Bachelor of Arts, Universität Leipzig
-Sozialwissenschaften (Soziologie & Politikwissenschaft), Nebenfach Philosophie
+## 2016 – 2020 | Bachelor of Arts, Leipzig University
+Social Sciences (Sociology & Political Science), minor in Philosophy
 
-# Kenntnisse
+# Skills
 
-## Entwicklung | AL, Python, TypeScript, PowerShell, SQL
-## Plattformen | Azure, Power Platform, GitHub Actions, Docker
-## Sprachen | Deutsch (Muttersprache), Englisch (verhandlungssicher)
+## Development | AL, Python, TypeScript, PowerShell, SQL
+## Platforms | Azure, Power Platform, GitHub Actions, Docker
+## Languages | German (native), English (fluent)

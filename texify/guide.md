@@ -1,94 +1,95 @@
-# TeXify – Template-Leitfaden
+# TeXify – template authoring guide
 
-Ein Template macht aus einem Markdown-Dokument mit YAML-Frontmatter ein
-gestaltetes LaTeX-Dokument. **Inhalt** steht im Markdown (lesbar, ohne
-LaTeX-Kenntnisse), **Design** steht ausschließlich im Template.
+A template turns a Markdown document with YAML frontmatter into a designed
+LaTeX document. **Content** lives in the Markdown (readable, no LaTeX
+knowledge needed), **design** lives exclusively in the template.
 
-## Ordnerstruktur
+## Folder layout
 
 ```
 templates/<name>/
-  template.tex    Jinja2-Template (LaTeX), Pflicht
-  template.yaml   Metadaten (Beschreibung, Felder, Defaults, Headings, Texte)
-  example.md      vollständiges Beispieldokument (wird von `texify new` kopiert)
-  *.png, *.sty    weitere Dateien werden ins Build-Verzeichnis kopiert
+  template.tex    Jinja2 template (LaTeX), required
+  template.yaml   metadata (description, fields, defaults, headings, strings)
+  example.md      complete example document (copied by `texify new`)
+  *.png, *.sty    any other file is copied into the build directory
 ```
 
-Suchreihenfolge (später gewinnt): eingebaut → `~/.texify/templates` →
-Projektordner `templates/` (siehe `texify.toml`).
+Search order (later wins): built-in → `~/.texify/templates` → project folder
+`templates/` (see `texify.toml`).
 
-## Dokument (Eingabe)
+## Document (input)
 
 ```markdown
 ---
-template: letter            # welches Template
-subject: Bewerbung als …    # beliebige Felder, im Template als \VAR{subject}
+template: letter            # which template
+subject: Application for …  # any fields, available as \VAR{subject}
 recipient: |
-  Firma GmbH
-  Straße 1
-  12345 Stadt
+  Example Ltd.
+  1 High Street
+  12345 Sampletown
 ---
 
-Fließtext in **Markdown**: Listen, Tabellen, Links, Bilder, Zitate, Code.
+Running text in **Markdown**: lists, tables, links, images, quotes, code.
 ```
 
-Werte aus `texify.toml` unter `[defaults]` (z. B. `[defaults.sender]`) werden
-mit dem Frontmatter zusammengeführt; das Frontmatter gewinnt.
-Postleitzahlen/IDs mit führender Null in Anführungszeichen setzen (`zip: "04109"`).
+Values from `texify.toml` under `[defaults]` (e.g. `[defaults.sender]`) are
+merged with the frontmatter; the frontmatter wins. YAML is read without the
+YAML 1.1 number surprises: `10:00` and `01234` stay text.
 
-## Template-Syntax (Jinja2 mit LaTeX-freundlichen Begrenzern)
+## Template syntax (Jinja2 with LaTeX-friendly delimiters)
 
-| Zweck              | Syntax                                   |
+| Purpose            | Syntax                                   |
 |--------------------|------------------------------------------|
-| Wert ausgeben      | `\VAR{subject}`                          |
-| Block inline       | `\BLOCK{if photo}...\BLOCK{endif}`       |
-| Zeilen-Anweisung   | `%: for it in items` … `%: endfor`        |
-| Kommentar          | `%# Kommentar` oder `\#{ Kommentar }`    |
+| Output a value     | `\VAR{subject}`                          |
+| Inline block       | `\BLOCK{if photo}...\BLOCK{endif}`       |
+| Line statement     | `%: for it in items` … `%: endfor`        |
+| Comment            | `%# comment` or `\#{ comment }`          |
 
-* Alle Ausgaben werden **automatisch LaTeX-escaped** (`&`, `%`, `_`, `"` …).
-  Bereits fertiges LaTeX (z. B. `body`) wird nicht doppelt escaped.
-* Fehlende Felder ergeben einen leeren String; `sender.name` funktioniert auch,
-  wenn `sender` fehlt. Pflichtfelder in `template.yaml` als `required: true`.
-* Dict-Schlüssel, die wie Methoden heißen (`items`, `keys`, `values`), mit
-  `x['items']` statt `x.items` ansprechen.
-* Ausdrücke dürfen kein `}` enthalten (es beendet `\VAR{`/`\BLOCK{`).
+* All output is **LaTeX-escaped automatically** (`&`, `%`, `_`, `"` …).
+  Ready-made LaTeX (e.g. `body`) is not escaped twice.
+* Missing fields render as an empty string; `sender.name` also works when
+  `sender` is missing. Mark mandatory fields with `required: true`.
+* A LaTeX command directly before a value is separated automatically
+  (`\selectfont\VAR{name}` renders as `\selectfont{}Alex`).
+* Access dict keys that look like methods (`items`, `keys`, `values`) as
+  `x['items']` instead of `x.items`.
+* Expressions must not contain `}` (it ends `\VAR{`/`\BLOCK{`).
 
-### Variablen im Kontext
+### Context variables
 
-| Variable   | Inhalt                                                          |
-|------------|-----------------------------------------------------------------|
-| `body`     | gesamter Markdown-Text als LaTeX                                |
-| `sections` | Liste `{title, raw_title, slug, body}` je Überschrift 1. Ebene  |
-| `markdown` | Markdown-Rohtext                                                |
-| `txt`      | Texte aus `strings.<lang>` der template.yaml                    |
-| `lang`     | `de` oder `en`;  `font`: `sans`/`serif`;  `accent`: Hex-Farbe   |
-| alle Frontmatter-/Default-Felder unter ihrem Namen                          |
+| Variable   | Content                                                          |
+|------------|------------------------------------------------------------------|
+| `body`     | the whole Markdown text as LaTeX                                 |
+| `sections` | list of `{title, raw_title, slug, body}`, one per top-level heading |
+| `markdown` | the raw Markdown text                                            |
+| `txt`      | texts from `strings.<lang>` in template.yaml (fallback: `en`)    |
+| `lang`     | `en` or `de`;  `font`: `sans`/`serif`;  `accent`: hex colour     |
+| all frontmatter/default fields under their own name                          |
 
-### Filter
+### Filters
 
-| Filter                 | Wirkung                                                  |
+| Filter                 | Effect                                                   |
 |------------------------|----------------------------------------------------------|
-| `x\|md`                 | Inline-Markdown → LaTeX (`**fett**`, Links, `code`)      |
-| `x\|mdblock`            | Block-Markdown → LaTeX (Absätze, Listen, Tabellen)       |
-| `x\|lines`              | mehrzeiliger Text oder Liste → Zeilen mit `\\`           |
-| `x\|texjoin(', ')`      | Liste escapen und verbinden                              |
-| `x\|date` / `date('short')` | Datum sprachabhängig („11. Oktober 2026“ / 11.10.2026); `today` erlaubt |
-| `x\|num` / `num(2)`     | Zahl sprachabhängig (1.234,5)                            |
-| `x\|money`              | Betrag mit Währung (1.234,50 €)                          |
-| `x\|color`              | Hex-Farbe prüfen (für `\definecolor{..}{HTML}{..}`)     |
-| `x\|asset`              | Datei (Foto, Logo, Unterschrift) ins Build kopieren → Pfad für `\includegraphics` |
-| `x\|tex`                | Wert unverändert als LaTeX ausgeben (nur für vertrauenswürdige Werte) |
+| `x\|md`                 | inline Markdown → LaTeX (`**bold**`, links, `code`)      |
+| `x\|mdblock`            | block Markdown → LaTeX (paragraphs, lists, tables)       |
+| `x\|lines`              | multi-line text or list → lines joined with `\\`         |
+| `x\|texjoin(', ')`      | escape a list and join it                                |
+| `x\|date` / `date('short')` | language-aware date ("October 11, 2026" / "2026-10-11"; de: "11. Oktober 2026" / "11.10.2026"); `today` allowed |
+| `x\|num` / `num(2)`     | language-aware number (1,234.5 / de: 1.234,5)            |
+| `x\|money`              | amount with currency (€1,234.50 / de: 1.234,50 €)        |
+| `x\|color`              | validate a hex colour (for `\definecolor{..}{HTML}{..}`) |
+| `x\|asset`              | copy a file (photo, logo, signature) into the build → path for `\includegraphics` |
+| `x\|tex`                | output the value unchanged as LaTeX (trusted values only) |
 
+### Global functions
 
-### Globale Funktionen
+* `invoice_totals(items, vat, small_business)` → `{items (with total), net, vat_rate, vat, gross}` (exact, Decimal)
+* `sum_amounts(list, key='amount')` → sum
+* `add_days(date, n)` → date + n days;  `today` → today's date
 
-* `invoice_totals(items, vat, small_business)` → `{items (mit total), net, vat_rate, vat, gross}` (exakt, Decimal)
-* `sum_amounts(list, key='amount')` → Summe
-* `add_days(date, n)` → Datum + n Tage;  `today` → heutiges Datum
+## Mandatory preamble
 
-## Pflicht-Präambel
-
-Jedes Template lädt das gemeinsame Designpaket **direkt nach `\documentclass`**:
+Every template loads the shared design package **right after `\documentclass`**:
 
 ```latex
 \documentclass[fontsize=11pt,paper=a4,parskip=half]{scrartcl}
@@ -96,62 +97,65 @@ Jedes Template lädt das gemeinsame Designpaket **direkt nach `\documentclass`**
 \texifyaccent{\VAR{accent}}
 ```
 
-`texify.sty` stellt bereit: Schriften (TeX Gyre Heros/Pagella, pdfLaTeX und
-XeLaTeX), babel (de/en), xcolor mit `accent`, `texifytext`, `texifymuted`,
-`texifyrule`, `texifybg`; graphicx, tabularx (+ Spaltentyp `L` = linksbündiges X),
-booktabs, enumitem, fancyvrb, ulem, amssymb, hyperref. Makros: `\texifyrule`,
-`\texifyimage{datei}`, `\texifyheading{Text}`, `\texifyspaced{Text}` (Sperrsatz).
+`texify.sty` provides: fonts (TeX Gyre Heros/Pagella, pdfLaTeX and XeLaTeX),
+babel (en/de), xcolor with `accent`, `texifytext`, `texifymuted`,
+`texifyrule`, `texifybg`; graphicx, tabularx (+ column types `L` = ragged X and
+`Y{w}` = weighted ragged X), booktabs, enumitem, fancyvrb, ulem, amssymb,
+hyperref. Macros: `\texifyrule`, `\texifyimage{file}`, `\texifyheading{Text}`,
+`\texifyspaced{Text}` (letter-spacing). Letter-like templates may additionally
+load `texify-letter` (KOMA scrlttr2 layout).
 
-Weitere Pakete nach `\usepackage{texify}` laden. Erlaubt sind nur Pakete aus
-TeX Live *latex-recommended/latex-extra/fonts-recommended* (z. B. KOMA-Script,
-tcolorbox, paracol, tikz, geometry, scrlayer-scrpage). Nicht verfügbar:
-fontawesome, eigene Systemschriften, `--shell-escape`.
+Load further packages after `\usepackage{texify}`. Only packages from TeX Live
+*latex-recommended/latex-extra/fonts-recommended/pictures* are available (e.g.
+KOMA-Script, tcolorbox, paracol, tikz, pgfornament, geometry,
+scrlayer-scrpage). Not available: fontawesome, system fonts, `--shell-escape`.
 
-## Markdown-Ausgabe und Überschriften
+## Markdown output and headings
 
-Der Renderer erzeugt: `itemize`/`enumerate`, `tabularx` mit booktabs,
-`quote`, `Verbatim`, `\href`, `\texifyimage`, `\textbf`, `\emph`, `\sout`.
-Ein Codeblock mit der Info-Zeichenkette `{=latex}` wird roh übernommen.
+The renderer emits `itemize`/`enumerate`, `tabularx` with booktabs, `quote`,
+`Verbatim`, `\href`, `\texifyimage`, `\textbf`, `\emph`, `\sout`. A code block
+with the info string `{=latex}` is passed through raw.
 
-Überschriften werden normalisiert: die flachste Überschrift im Dokument ist
-Ebene 1. Die Abbildung steht in `template.yaml` unter `headings`
-(Standard: 1 → `\section`, 2 → `\subsection`, 3 → `\subsubsection`):
+Headings are normalised: the shallowest heading in a document is level 1.
+`template.yaml` maps levels under `headings` (default: 1 → `\section`,
+2 → `\subsection`, 3 → `\subsubsection`):
 
 ```yaml
 headings:
-  1: cvsection                                   # \cvsection{Titel}
+  1: cvsection                                   # \cvsection{Title}
   2: {cmd: cventry, args: 2, split: "|", pad: start}
-  #   "## 2020 – 2022 | Master, TU Dresden" → \cventry{2020 – 2022}{Master, TU Dresden}
-  3: {env: block, args: 1}                       # \begin{block}{Titel} … \end{block}
+  #   "## 2020 – 2022 | MSc, TU Dresden" → \cventry{2020 – 2022}{MSc, TU Dresden}
+  3: {env: block, args: 1}                       # \begin{block}{Title} … \end{block}
 ```
 
-`env`-Überschriften umschließen alles bis zur nächsten Überschrift gleicher
-oder höherer Ebene. Alle verwendeten Befehle/Umgebungen muss das Template
-definieren. Die Ebenen in `sections[i].body` beginnen bei 2.
+`env` headings wrap everything up to the next heading of the same or a higher
+level. The template must define every command/environment it maps to. Levels
+inside `sections[i].body` start at 2.
 
 ## template.yaml
 
 ```yaml
-description: Ein Satz, wofür das Template gedacht ist.
-title_from_heading: false     # true: erstes "# Titel" wird zu title
-fields:                       # Doku + Validierung
-  name: {required: true, description: Vollständiger Name}
-  photo: Bewerbungsfoto (optional)   # Kurzform = Beschreibung
-defaults:                     # Vorbelegungen (niedrigste Priorität)
+description: One sentence on what the template is for.
+title_from_heading: false     # true: the first "# Title" becomes title
+fields:                       # documentation + validation
+  name: {required: true, description: Full name}
+  photo: Photo (optional)     # short form = description
+defaults:                     # pre-set values (lowest priority)
   date: today
-headings: {}                  # siehe oben
-strings:                      # sprachabhängige Texte → \VAR{txt.x}
-  de: {title: Bestätigung}
+headings: {}                  # see above
+strings:                      # language-dependent texts → \VAR{txt.x}
   en: {title: Confirmation}
+  de: {title: Bestätigung}
 ```
 
-## Gestaltungsregeln
+## Design rules
 
-* Professionell und ruhig: eine Akzentfarbe (`accent`), viel Weißraum,
-  klare Hierarchie, keine Effekte. A4, Ränder ≥ 1,5 cm.
-* Alle sichtbaren Standardtexte über `strings` (de **und** en) statt hart codiert.
-* Optionale Felder immer mit `%: if feld` absichern.
-* Struktur aus Markdown nutzen (Überschriften-Mapping, `sections`) statt den
-  Nutzer zu zwingen, Fließtext in YAML zu schreiben. YAML nur für echte Daten
-  (Adressen, Beträge, Positionen, Eckdaten).
-* Template-Code muss mit pdfLaTeX kompilieren (XeLaTeX wünschenswert).
+* Professional and calm: one accent colour (`accent`), plenty of white space,
+  clear hierarchy, no effects. A4, margins ≥ 1.5 cm.
+* Every visible default text goes through `strings` (en **and** de), never
+  hard-coded.
+* Guard optional fields with `%: if field`.
+* Use the Markdown structure (heading map, `sections`) instead of forcing users
+  to write running text into YAML. YAML only for real data (addresses,
+  amounts, line items, key facts).
+* The template must compile with pdfLaTeX (XeLaTeX desirable).

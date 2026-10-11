@@ -1,20 +1,20 @@
 description: >-
-  Projektantrag / Förderantrag / Angebotskonzept: Titelblock, Eckdaten-Box
-  (facts), nummerierte Abschnitte aus Markdown, optional Kostenplan mit
-  automatisch berechneter Summe und Unterschriftszeile.
+  Project proposal / grant application / concept: title block, key-facts box
+  (facts), numbered sections from Markdown, optional budget table with an
+  automatically calculated total and a signature line.
 title_from_heading: true
 fields:
-  title: {required: true, description: Projekttitel (oder erste Überschrift "# ...")}
-  subtitle: Untertitel
-  kind: Dokumentart über dem Titel (Standard 'Projektantrag')
-  applicant: Antragsteller/in
-  facts: "Eckdaten als Label: Wert (z. B. Laufzeit: 01/2027 – 12/2027)"
-  budget: "Kostenplan: Liste aus {item, amount, note}"
-  budget_title: Überschrift des Kostenplans
-  numbered: Abschnitte nummerieren (Standard true)
-  signature_line: Ort/Datum + Unterschriftszeile am Ende (true/false)
-  place: Ort für die Unterschriftszeile
-  date: Datum (Standard heute)
+  title: {required: true, description: Project title (or first heading "# ...")}
+  subtitle: Subtitle
+  kind: Document type above the title (default 'Project proposal')
+  applicant: Applicant
+  facts: "Key facts as Label: Value (e.g. Duration: 01/2027 – 12/2027)"
+  budget: "Budget: list of {item, amount, note}"
+  budget_title: Heading of the budget
+  numbered: Number the sections (default true)
+  signature_line: Place/date + signature line at the end (true/false)
+  place: Place for the signature line
+  date: Date (default today)
 defaults:
   numbered: true
   signature_line: false

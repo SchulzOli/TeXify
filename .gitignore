@@ -12,5 +12,8 @@ out/
 *.fls
 *.fdb_latexmk
 *.synctex.gz
-# persoenliche Arbeitsdaten
+# personal working data
 data/
+
+# shared MCP server workspace (docker compose up -d mcp)
+workspace/

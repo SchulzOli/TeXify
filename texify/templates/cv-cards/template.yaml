@@ -1,15 +1,14 @@
 description: >-
-  Moderner zweispaltiger Lebenslauf mit grauen Karten (Seitenleiste +
-  Hauptspalte). Gleiches Markdown wie 'cv': "# Abschnitt", "## Zeitraum |
-  Position, Firma". Welche Abschnitte in die Seitenleiste kommen, steuert
-  das Feld sidebar.
+  Modern two-column CV with soft grey cards (sidebar + main column). Same
+  Markdown as 'cv': "# Section", "## Period | Position, Company". The field
+  sidebar decides which sections go into the sidebar.
 fields:
-  name: {required: true, description: Vollständiger Name}
-  headline: Zeile unter dem Namen (Standard 'Lebenslauf')
-  photo: Foto (Bilddatei, optional)
-  contact: "Kontakt: {phone, email, address, web, linkedin, github}"
-  sidebar: Liste der Abschnittstitel für die Seitenleiste
-  card_color: Hintergrundfarbe der Karten (Hex, Standard ECECEC)
+  name: {required: true, description: Full name}
+  headline: Line below the name (default 'Curriculum Vitae')
+  photo: Photo (image file, optional)
+  contact: "Contact: {phone, email, address, web, linkedin, github}"
+  sidebar: List of section titles for the sidebar
+  card_color: Card background colour (hex, default ECECEC)
 defaults:
   card_color: ECECEC
 headings:

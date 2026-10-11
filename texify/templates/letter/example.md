@@ -1,35 +1,34 @@
 ---
 template: letter
 sender:
-  name: Max Mustermann
-  street: Musterstraße 1
+  name: Alex Example
+  street: 1 Sample Street
   zip: "04109"
   city: Leipzig
   phone: +49 170 1234567
-  email: max@example.com
+  email: alex@example.com
 recipient: |
-  Beispiel GmbH
-  Frau Erika Musterfrau
-  Hauptstraße 5
+  Example Ltd.
+  Ms Jordan Sample
+  5 High Street
   10115 Berlin
-subject: Bewerbung als Solution Architect (Kennziffer 2026-42)
-opening: Sehr geehrte Frau Musterfrau,
+subject: Application for the position of Solution Architect (ref. 2026-42)
+opening: Dear Ms Sample,
 enclosures:
-  - Lebenslauf
-  - Arbeitszeugnisse
+  - CV
+  - References
 ---
 
-mit großem Interesse habe ich Ihre Stellenanzeige gelesen. Als **Solution
-Engineer** mit mehr als drei Jahren Erfahrung in der Entwicklung von
-ERP-Lösungen bringe ich genau die Kombination aus Technik und
-Kundenorientierung mit, die Sie suchen.
+I read your job advertisement with great interest. As a **solution engineer**
+with more than three years of experience in building ERP solutions, I bring
+exactly the mix of technical depth and customer focus you are looking for.
 
-In meiner aktuellen Position verantworte ich:
+In my current role I am responsible for:
 
-- die Architektur skalierbarer Erweiterungen für Microsoft Dynamics 365,
-- Workshops zu CI/CD und agentischen Workflows,
-- die End-to-End-Dokumentation unserer Produkte.
+- the architecture of scalable extensions for Microsoft Dynamics 365,
+- workshops on CI/CD and agentic workflows,
+- the end-to-end documentation of our products.
 
-Besonders reizt mich an Ihrem Unternehmen die Verbindung aus Produktentwicklung
-und Beratung. Über die Einladung zu einem persönlichen Gespräch freue ich mich
-sehr.
+What attracts me most to your company is the combination of product
+development and consulting. I would be delighted to discuss my application
+with you in person.

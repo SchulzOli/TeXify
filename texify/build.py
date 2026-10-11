@@ -36,7 +36,7 @@ class Document:
 
     @property
     def stem(self) -> str:
-        return self.path.stem if self.path else "dokument"
+        return self.path.stem if self.path else "document"
 
 
 def parse_document(text: str, path: Path | None = None) -> Document:
@@ -47,21 +47,21 @@ def parse_document(text: str, path: Path | None = None) -> Document:
         meta = load_yaml(m.group(1)) or {}
     except yaml.YAMLError as exc:
         where = f"{path}: " if path else ""
-        raise TexifyError(f"{where}Frontmatter ist kein gültiges YAML: {exc}") from None
+        raise TexifyError(f"{where}frontmatter is not valid YAML: {exc}") from None
     if not isinstance(meta, dict):
-        raise TexifyError(f"{path or 'Dokument'}: Frontmatter muss ein YAML-Mapping sein")
+        raise TexifyError(f"{path or 'document'}: frontmatter must be a YAML mapping")
     return Document(meta, text[m.end():], path)
 
 
 def load_document(path: Path) -> Document:
     if not path.is_file():
-        raise TexifyError(f"Datei nicht gefunden: {path}")
+        raise TexifyError(f"File not found: {path}")
     text = path.read_text(encoding="utf-8-sig")
     if path.suffix.lower() in {".yaml", ".yml"}:
         try:
             meta = load_yaml(text) or {}
         except yaml.YAMLError as exc:
-            raise TexifyError(f"{path}: ungültiges YAML: {exc}") from None
+            raise TexifyError(f"{path}: invalid YAML: {exc}") from None
         body = meta.pop("body", "") if isinstance(meta, dict) else ""
         return Document(meta, body or "", path)
     return parse_document(text, path)
@@ -77,15 +77,15 @@ def _asset_resolver(search_dirs: list[Path], build_dir: Path):
 
     def asset(src: str) -> str:
         if re.match(r"^[a-z][a-z0-9+.-]*://", src, re.I):
-            raise TexifyError(f"Nur lokale Dateien werden eingebunden, keine URLs: {src}")
+            raise TexifyError(f"Only local files can be embedded, not URLs: {src}")
         for base in search_dirs:
             p = (base / src).resolve()
             if p.is_file():
                 break
         else:
-            raise TexifyError(f"Datei nicht gefunden: {src} (gesucht in: {', '.join(map(str, search_dirs))})")
+            raise TexifyError(f"File not found: {src} (searched: {', '.join(map(str, search_dirs))})")
         if p not in copied:
-            safe = re.sub(r"[^A-Za-z0-9-]+", "-", p.stem).strip("-").lower() or "datei"
+            safe = re.sub(r"[^A-Za-z0-9-]+", "-", p.stem).strip("-").lower() or "file"
             name = f"assets/a{len(copied) + 1}-{safe}{p.suffix.lower()}"
             (build_dir / "assets").mkdir(exist_ok=True)
             shutil.copy2(p, build_dir / name)
@@ -107,7 +107,7 @@ def build_context(doc: Document, template: Template, cfg: Config, renderer: Late
     ctx["markdown"] = body
     lang = ctx["lang"]
     strings = template.strings
-    ctx["txt"] = deep_merge(strings.get("de", {}), strings.get(lang, {}))
+    ctx["txt"] = deep_merge(strings.get("en", {}), strings.get(lang, {}))
     ctx["template"] = template.name
     return ctx
 
@@ -126,7 +126,7 @@ def render_tex(
     lang = normalize_lang(merged.get("lang"))
     font = str(merged.get("font", "sans")).lower()
     if font not in FONTS:
-        raise TexifyError(f"font muss 'sans' oder 'serif' sein, nicht {font!r}")
+        raise TexifyError(f"font must be 'sans' or 'serif', not {font!r}")
     doc.meta = {**doc.meta, "lang": lang, "font": font,
                 "accent": color_hex(merged.get("accent", "1F4E79"))}
 
@@ -140,7 +140,7 @@ def render_tex(
         fields = template.fields
         lines = [f"  • {k}: {fields[k].get('description', '')}" for k in missing]
         raise TexifyError(
-            f"Template '{template.name}' braucht noch folgende Angaben (Frontmatter oder texify.toml [defaults]):\n"
+            f"Template '{template.name}' still needs these fields (frontmatter or texify.toml [defaults]):\n"
             + "\n".join(lines)
         )
 
@@ -155,7 +155,7 @@ def render_tex(
 
 
 def _safe_stem(stem: str) -> str:
-    return re.sub(r"[^A-Za-z0-9._-]+", "_", stem).strip("_") or "dokument"
+    return re.sub(r"[^A-Za-z0-9._-]+", "_", stem).strip("_") or "document"
 
 
 # --------------------------------------------------------------------------- #
@@ -208,7 +208,7 @@ def build(
             shutil.move(pdf, output)
         return BuildResult(source, output, engine=eng)
     if suffix not in SOURCE_SUFFIXES:
-        raise TexifyError(f"Nicht unterstützter Dateityp: {source.name} (erlaubt: .md .txt .yaml .tex .pdf)")
+        raise TexifyError(f"Unsupported file type: {source.name} (allowed: .md .txt .yaml .tex .pdf)")
 
     doc = load_document(source)
     eng = engines.resolve(cfg, engine)

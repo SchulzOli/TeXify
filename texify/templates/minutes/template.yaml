@@ -1,22 +1,22 @@
 description: >-
-  Protokoll / Sitzungsniederschrift / Tagesordnung: Kopfdaten-Box, automatisch
-  erzeugte Tagesordnung aus den Überschriften, nummerierte TOPs, Aufgabenliste
-  (wer, was, bis wann) und optionale Unterschriften.
+  Meeting minutes / agenda: header box, agenda generated automatically from
+  the headings, numbered agenda items, action items (who, what, by when) and
+  optional signatures.
 title_from_heading: true
 fields:
-  title: {required: true, description: Titel der Sitzung (oder erste Überschrift "# ...")}
-  kind: Dokumentart über dem Titel (Standard 'Protokoll', z. B. 'Tagesordnung')
-  date: Datum der Sitzung
-  time: Uhrzeit (z. B. '10:00 – 11:30 Uhr')
-  place: Ort / Raum / Videokonferenz
-  chair: Sitzungsleitung
-  recorder: Protokollführung
-  attendees: Liste der Teilnehmenden
-  absent: Liste der Entschuldigten
-  guests: Liste der Gäste
-  actions: "Aufgaben: Liste aus {task, owner, due}"
-  next_meeting: Nächster Termin
-  signatures: Unterschriftszeilen für Leitung und Protokoll (true/false)
+  title: {required: true, description: Meeting title (or first heading "# ...")}
+  kind: Document type above the title (default 'Minutes', e.g. 'Agenda')
+  date: Date of the meeting
+  time: Time (e.g. '10:00 – 11:30')
+  place: Location / room / video call
+  chair: Chair
+  recorder: Minute taker
+  attendees: List of attendees
+  absent: List of apologies
+  guests: List of guests
+  actions: "Action items: list of {task, owner, due}"
+  next_meeting: Next meeting
+  signatures: Signature lines for chair and minute taker (true/false)
 defaults:
   signatures: false
 headings:

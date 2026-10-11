@@ -1,26 +1,26 @@
 description: >-
-  Geschäftsbrief nach DIN 5008 (KOMA-Script): Bewerbungsanschreiben,
-  Kündigung, Anfrage, Widerspruch ... Absender am besten einmalig in
-  texify.toml unter [defaults.sender] hinterlegen.
+  Business letter in DIN 5008 layout (KOMA-Script, window envelope ready):
+  cover letter, cancellation, complaint, enquiry, payment reminder. Store
+  the sender once in texify.toml under [defaults.sender].
 fields:
-  sender.name: {required: true, description: "Absender-Name (texify.toml [defaults.sender])"}
-  sender.street: {required: true, description: Absender Straße + Nr.}
-  sender.zip: {required: true, description: Absender PLZ}
-  sender.city: {required: true, description: Absender Ort}
-  sender.phone: Telefon
-  sender.email: E-Mail
-  sender.web: Webseite
-  recipient: {required: true, description: "Empfängeradresse, mehrzeilig (YAML: recipient: |)"}
-  subject: Betreffzeile
-  date: Datum (Standard heute)
-  place: Ort vor dem Datum (Standard sender.city)
-  opening: Anrede (Standard 'Sehr geehrte Damen und Herren,')
-  closing: Grußformel (Standard 'Mit freundlichen Grüßen')
-  signature: Bilddatei der Unterschrift (optional)
-  enclosures: Liste der Anlagen
-  your_ref: Ihr Zeichen
-  your_letter: Datum Ihres Schreibens
-  my_ref: Unser Zeichen
+  sender.name: {required: true, description: "Sender name (texify.toml [defaults.sender])"}
+  sender.street: {required: true, description: Sender street and number}
+  sender.zip: {required: true, description: Sender postcode}
+  sender.city: {required: true, description: Sender city}
+  sender.phone: Phone
+  sender.email: E-mail
+  sender.web: Website
+  recipient: {required: true, description: "Recipient address, several lines (YAML: recipient: |)"}
+  subject: Subject line
+  date: Date (default today)
+  place: Place before the date (default sender.city)
+  opening: Salutation (default 'Dear Sir or Madam,')
+  closing: Closing (default 'Kind regards')
+  signature: Image file of the signature (optional)
+  enclosures: List of enclosures
+  your_ref: Your reference
+  your_letter: Date of your letter
+  my_ref: Our reference
 defaults:
   date: today
 headings:

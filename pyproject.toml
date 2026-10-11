@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "texify"
 version = "0.2.0"
-description = "Markdown/Text -> LaTeX -> PDF: professionelle Dokumente aus einfachen Textdateien (CLI + MCP)"
+description = "Markdown/Text -> LaTeX -> PDF: professional documents from plain text files (CLI + MCP server)"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -17,9 +17,8 @@ dependencies = [
 
 [project.optional-dependencies]
 mcp = ["mcp>=1.10,<2"]
-ai = ["anthropic>=0.79"]
 docx = ["python-docx>=1.1"]
-all = ["texify[mcp,ai,docx]"]
+all = ["texify[mcp,docx]"]
 dev = ["texify[all]", "pytest>=8", "pypdfium2>=4"]
 
 [project.scripts]

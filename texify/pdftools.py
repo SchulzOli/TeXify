@@ -27,12 +27,12 @@ def collect_inputs(inputs: list[str], suffixes: set[str] | None = None) -> list[
         elif _GLOB_CHARS & set(item):
             matches = sorted(glob.glob(item), key=str.lower)
             if not matches:
-                raise TexifyError(f"Keine Treffer für '{item}'")
+                raise TexifyError(f"No matches for '{item}'")
             files += [Path(m) for m in matches]
         elif p.is_file():
             files.append(p)
         else:
-            raise TexifyError(f"Nicht gefunden: {item}")
+            raise TexifyError(f"Not found: {item}")
     return files
 
 
@@ -48,9 +48,9 @@ def _open(path: Path) -> PdfReader:
     try:
         reader = PdfReader(path)
     except Exception as exc:  # pypdf raises many different errors
-        raise TexifyError(f"PDF nicht lesbar: {path.name}: {exc}") from None
+        raise TexifyError(f"Cannot read PDF {path.name}: {exc}") from None
     if reader.is_encrypted and not reader.decrypt(""):
-        raise TexifyError(f"PDF ist passwortgeschützt: {path.name}")
+        raise TexifyError(f"PDF is password protected: {path.name}")
     return reader
 
 
@@ -61,7 +61,7 @@ def merge(files: list[Path], output: Path, bookmarks: bool = False,
     ``titles`` overrides bookmark labels (defaults to file stems).
     """
     if not files:
-        raise TexifyError("Keine PDF-Dateien zum Zusammenführen")
+        raise TexifyError("No PDF files to merge")
     output = output.resolve()
     files = [f for f in files if f.resolve() != output]  # never read the target itself
     writer = PdfWriter()
@@ -93,12 +93,12 @@ def parse_ranges(spec: str, total: int) -> list[int]:
             else:
                 lo = hi = int(part)
         except ValueError:
-            raise TexifyError(f"Ungültiger Seitenbereich: {part!r}") from None
+            raise TexifyError(f"Invalid page range: {part!r}") from None
         if not (1 <= lo <= hi <= total):
-            raise TexifyError(f"Seitenbereich {part!r} außerhalb von 1–{total}")
+            raise TexifyError(f"Page range {part!r} outside 1–{total}")
         pages += range(lo - 1, hi)
     if not pages:
-        raise TexifyError("Keine Seiten ausgewählt")
+        raise TexifyError("No pages selected")
     return pages
 
 

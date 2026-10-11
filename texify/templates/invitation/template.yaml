@@ -1,20 +1,20 @@
 description: >-
-  Einladung zu Veranstaltung, Feier, Jubiläum, Workshop oder
-  Mitgliederversammlung: farbiges Titelband, Datum/Uhrzeit/Ort prominent,
-  Einladungstext, optionaler Ablauf und Rückmeldebox.
+  Invitation to an event, party, anniversary, workshop or general meeting:
+  coloured title banner, prominent date/time/venue, invitation text,
+  optional programme and RSVP box.
 title_from_heading: true
 fields:
-  title: {required: true, description: Name der Veranstaltung (oder erste Überschrift)}
-  subtitle: Untertitel / Anlass
-  kind: Zeile über dem Titel (Standard 'Einladung')
-  date: {required: true, description: Datum}
-  time: Uhrzeit (z. B. '18:00 Uhr')
-  place_name: Name des Ortes (z. B. 'Kulturhaus')
-  place: Adresse, mehrzeilig
-  program: "Ablauf: Liste aus {time, item}"
-  rsvp: Rückmeldung bis / an
-  dress_code: Kleiderordnung
-  host: Gastgeber (Fußzeile)
+  title: {required: true, description: Name of the event (or first heading)}
+  subtitle: Subtitle / occasion
+  kind: Line above the title (default 'Invitation')
+  date: {required: true, description: Date}
+  time: Time (e.g. '6 pm')
+  place_name: Name of the venue (e.g. 'Town Hall')
+  place: Address, several lines
+  program: "Programme: list of {time, item}"
+  rsvp: RSVP by / to
+  dress_code: Dress code
+  host: Host (footer)
 strings:
   de:
     invitation: Einladung

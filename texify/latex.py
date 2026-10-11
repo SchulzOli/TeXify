@@ -85,12 +85,12 @@ LANGS = {"de", "en"}
 
 
 def normalize_lang(value: Any) -> str:
-    v = str(value or "de").strip().lower()
+    v = str(value or "en").strip().lower()
     if v.startswith(("de", "german", "ngerman")):
         return "de"
     if v.startswith(("en", "english")):
         return "en"
-    raise TexifyError(f"Sprache {value!r} wird nicht unterstützt (erlaubt: de, en)")
+    raise TexifyError(f"Language {value!r} is not supported (allowed: en, de)")
 
 
 SMART_QUOTES = {"de": "„“‚‘", "en": "“”‘’"}
@@ -138,7 +138,7 @@ def format_date(value: Any, lang: str, style: str = "long") -> str:
     return f"{d.day}. {month} {d.year}" if lang == "de" else f"{month} {d.day}, {d.year}"
 
 
-def to_decimal(value: Any, what: str = "Zahl") -> Decimal:
+def to_decimal(value: Any, what: str = "number") -> Decimal:
     if isinstance(value, Decimal):
         return value
     if isinstance(value, (int, float)):
@@ -150,7 +150,7 @@ def to_decimal(value: Any, what: str = "Zahl") -> Decimal:
     try:
         return Decimal(s)
     except InvalidOperation:
-        raise TexifyError(f"{what} ungültig: {value!r}") from None
+        raise TexifyError(f"Invalid {what}: {value!r}") from None
 
 
 def format_number(value: Any, lang: str, decimals: int | None = None) -> str:
@@ -195,5 +195,5 @@ _HEX = re.compile(r"^#?([0-9A-Fa-f]{6})$")
 def color_hex(value: Any) -> str:
     m = _HEX.match(str(value or "").strip())
     if not m:
-        raise TexifyError(f"Farbe muss ein Hex-Wert sein (z. B. 1F4E79), nicht {value!r}")
+        raise TexifyError(f"Colour must be a hex value (e.g. 1F4E79), not {value!r}")
     return m.group(1).upper()

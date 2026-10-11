@@ -116,12 +116,12 @@ def load_template_meta(path: Path) -> dict:
     try:
         meta = load_yaml(meta_file.read_text(encoding="utf-8")) or {}
     except yaml.YAMLError as exc:
-        raise TexifyError(f"{meta_file}: ungültiges YAML: {exc}") from None
+        raise TexifyError(f"{meta_file}: invalid YAML: {exc}") from None
     if not isinstance(meta, dict):
-        raise TexifyError(f"{meta_file}: muss ein YAML-Mapping sein")
+        raise TexifyError(f"{meta_file}: must be a YAML mapping")
     unknown = set(meta) - META_KEYS
     if unknown:
-        raise TexifyError(f"{meta_file}: unbekannte Schlüssel: {', '.join(sorted(unknown))}")
+        raise TexifyError(f"{meta_file}: unknown keys: {', '.join(sorted(unknown))}")
     return meta
 
 
@@ -144,8 +144,8 @@ def get_template(name: str, cfg: Config) -> Template:
     if name not in templates:
         avail = ", ".join(sorted(templates)) or "-"
         raise TexifyError(
-            f"Template '{name}' nicht gefunden. Verfügbar: {avail}\n"
-            f"Neues Template per KI: texify ai template {name} \"<Beschreibung>\""
+            f"Template '{name}' not found. Available: {avail}\n"
+            f"Design a new one with AI: texify ai template {name} \"<description>\""
         )
     return templates[name]
 
@@ -158,18 +158,18 @@ def get_template(name: str, cfg: Config) -> Template:
 def invoice_totals(items: list, vat: Any = 19, small_business: bool = False) -> dict:
     """Compute line totals, net, VAT and gross with exact decimal arithmetic."""
     if not isinstance(items, list) or not items:
-        raise TexifyError("Rechnung braucht mindestens eine Position unter 'items'")
+        raise TexifyError("An invoice needs at least one line item under 'items'")
     rows = []
     net = Decimal(0)
     for i, it in enumerate(items, 1):
         if not isinstance(it, dict) or "price" not in it:
-            raise TexifyError(f"Position {i}: braucht mindestens 'desc' und 'price'")
-        qty = to_decimal(it.get("qty", 1), f"Menge in Position {i}")
-        price = to_decimal(it["price"], f"Preis in Position {i}")
+            raise TexifyError(f"Item {i}: needs at least 'desc' and 'price'")
+        qty = to_decimal(it.get("qty", 1), f"quantity in item {i}")
+        price = to_decimal(it["price"], f"price in item {i}")
         total = (qty * price).quantize(Decimal("0.01"))
         net += total
         rows.append({**it, "qty": qty, "price": price, "total": total})
-    rate = Decimal(0) if small_business else to_decimal(vat, "USt-Satz")
+    rate = Decimal(0) if small_business else to_decimal(vat, "VAT rate")
     vat_amount = (net * rate / 100).quantize(Decimal("0.01"))
     return {"items": rows, "net": net, "vat_rate": rate, "vat": vat_amount, "gross": net + vat_amount}
 
@@ -181,7 +181,7 @@ def sum_amounts(items: list, key: str = "amount") -> Decimal:
 def add_days(value: Any, days: Any) -> dt.date:
     d = to_date(value)
     if d is None:
-        raise TexifyError(f"Kein gültiges Datum: {value!r}")
+        raise TexifyError(f"Not a valid date: {value!r}")
     return d + dt.timedelta(days=int(days))
 
 

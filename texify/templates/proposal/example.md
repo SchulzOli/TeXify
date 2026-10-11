@@ -1,47 +1,47 @@
 ---
 template: proposal
-subtitle: Automatisierte Dokumentenerstellung für kleine Vereine
-applicant: Max Mustermann
+subtitle: Automated document creation for small non-profits
+applicant: Alex Example
 facts:
-  Antragsteller: Max Mustermann, Leipzig
-  Laufzeit: 01/2027 – 12/2027
-  Beantragte Summe: 18.500 €
-  Kontakt: max@example.com
+  Applicant: Alex Example, Leipzig
+  Duration: 01/2027 – 12/2027
+  Amount requested: €18,500
+  Contact: alex@example.com
 budget:
-  - item: Personalkosten Entwicklung
-    note: 300 Std. à 50 €
+  - item: Development staff costs
+    note: 300 h at €50
     amount: 15000
-  - item: Hosting & Infrastruktur
+  - item: Hosting & infrastructure
     amount: 1200
-  - item: Workshops mit Vereinen
-    note: 4 Termine inkl. Material
+  - item: Workshops with associations
+    note: 4 sessions incl. material
     amount: 2300
 signature_line: true
 place: Leipzig
 ---
 
-# TeXify für Vereine
+# TeXify for Non-Profits
 
-## Ausgangslage
+## Background
 
-Kleine Vereine erstellen Mitgliedsbescheinigungen, Spendenquittungen und
-Einladungen meist manuell in Textverarbeitungen. Das kostet Zeit und führt zu
-uneinheitlichen Dokumenten.
+Small associations create membership confirmations, donation receipts and
+invitations by hand in word processors. This costs time and leads to
+inconsistent documents.
 
-## Ziele
+## Goals
 
-1. Vorlagen für die zehn häufigsten Vereinsdokumente
-2. Erstellung aus einfachen Textdateien – ohne Vorkenntnisse
-3. Schulung von mindestens **20 Vereinen** im Projektzeitraum
+1. Templates for the ten most common association documents
+2. Creation from plain text files – no prior knowledge required
+3. Training for at least **20 associations** during the project
 
-## Arbeitsplan
+## Work plan
 
-| Phase | Zeitraum      | Ergebnis                         |
-|:------|:--------------|:---------------------------------|
-| 1     | Q1 2027       | Anforderungsanalyse mit Vereinen |
-| 2     | Q2–Q3 2027    | Vorlagen und Werkzeug            |
-| 3     | Q4 2027       | Schulungen und Evaluation        |
+| Phase | Period     | Result                              |
+|:------|:-----------|:------------------------------------|
+| 1     | Q1 2027    | Requirements analysis with partners |
+| 2     | Q2–Q3 2027 | Templates and tooling               |
+| 3     | Q4 2027    | Training and evaluation             |
 
-## Nachhaltigkeit
+## Sustainability
 
-Alle Ergebnisse werden als Open Source veröffentlicht.
+All results are published under an open licence.

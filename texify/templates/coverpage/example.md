@@ -1,19 +1,19 @@
 ---
 template: coverpage
-name: Max Mustermann
+name: Alex Example
 position: Solution Architect
-company: Beispiel GmbH
+company: Example Ltd.
 reference: 2026-42
 headline: Microsoft Dynamics 365 · Azure · CI/CD
 contact:
   address: |
-    Musterstraße 1
+    1 Sample Street
     04109 Leipzig
   phone: +49 170 1234567
-  email: max@example.com
+  email: alex@example.com
 contents:
-  - Anschreiben
-  - Lebenslauf
-  - Arbeitszeugnisse
-  - Zertifikate
+  - Cover letter
+  - Curriculum vitae
+  - References
+  - Certificates
 ---

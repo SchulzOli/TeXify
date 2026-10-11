@@ -42,10 +42,10 @@ class HeadingStyle:
             return cls(cmd=spec)
         unknown = set(spec) - {"cmd", "env", "args", "split", "pad"}
         if unknown:
-            raise TexifyError(f"Unbekannte Heading-Optionen: {', '.join(sorted(unknown))}")
+            raise TexifyError(f"Unknown heading options: {', '.join(sorted(unknown))}")
         style = cls(**spec)
         if bool(style.cmd) == bool(style.env):
-            raise TexifyError("Heading-Stil braucht genau eines von 'cmd' oder 'env'")
+            raise TexifyError("A heading style needs exactly one of 'cmd' or 'env'")
         return style
 
 
@@ -69,7 +69,7 @@ def slug(text: str) -> str:
 class LatexRenderer:
     def __init__(
         self,
-        lang: str = "de",
+        lang: str = "en",
         headings: dict | None = None,
         asset: Callable[[str], str] | None = None,
     ):

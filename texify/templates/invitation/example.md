@@ -1,25 +1,25 @@
 ---
 template: invitation
-subtitle: 10 Jahre Musterverein Leipzig
+subtitle: 10 years of the Sample Association
 date: 2026-11-21
-time: 18:00 Uhr
-place_name: Kulturhaus Mitte
+time: 6 pm
+place_name: Town Hall
 place: |
-  Hauptstraße 12
+  12 Market Square
   04109 Leipzig
 program:
-  - {time: "18:00", item: Empfang mit Sekt}
-  - {time: "18:30", item: Grußworte des Vorstands}
-  - {time: "19:00", item: Buffet und **Live-Musik**}
-  - {time: "22:00", item: Tanz}
-rsvp: bis 7. November an feier@example.org
-host: Musterverein Leipzig e. V.
+  - {time: "6:00", item: Welcome drinks}
+  - {time: "6:30", item: Words from the board}
+  - {time: "7:00", item: Dinner and **live music**}
+  - {time: "10:00", item: Dancing}
+rsvp: by 7 November to party@example.org
+host: Sample Association Leipzig
 ---
 
-# Jubiläumsfeier
+# Anniversary Party
 
-Liebe Mitglieder, Freundinnen und Freunde des Vereins,
+Dear members and friends,
 
-zehn Jahre Musterverein – das wollen wir mit euch feiern! Freut euch auf einen
-Abend mit gutem Essen, Musik und vielen Erinnerungen. Partner und Familie sind
-herzlich willkommen.
+Ten years of our association – let's celebrate together! Join us for an
+evening of good food, music and many memories. Partners and families are
+very welcome.

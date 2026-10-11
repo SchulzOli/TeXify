@@ -1,31 +1,32 @@
 description: >-
-  Rechnung oder Angebot (kind: quote) mit Positionstabelle; Zwischensummen, USt und Gesamtbetrag werden
-  exakt berechnet (Decimal). Enthält die Pflichtangaben nach §14 UStG,
-  optional Kleinunternehmerregelung (§19 UStG). Absender/Bank/Steuernummer
-  am besten in texify.toml [defaults.sender] hinterlegen.
+  Invoice or quote (kind: quote) with a line-item table; subtotal, VAT and
+  total are calculated exactly (decimal arithmetic). Contains all details
+  required for German invoices (§14 UStG), optionally the small-business
+  VAT exemption (§19 UStG). Store sender, bank and tax number once in
+  texify.toml [defaults.sender].
 fields:
-  sender.name: {required: true, description: "Rechnungssteller (texify.toml [defaults.sender])"}
-  sender.street: {required: true, description: Straße + Nr.}
-  sender.zip: {required: true, description: PLZ}
-  sender.city: {required: true, description: Ort}
-  sender.tax_id: Steuernummer (oder sender.vat_id)
-  sender.vat_id: USt-IdNr.
-  sender.bank: "Bankverbindung: {name, iban, bic}"
-  recipient: {required: true, description: "Rechnungsempfänger, mehrzeilig (YAML: recipient: |)"}
-  kind: "invoice (Rechnung, Standard) oder quote (Angebot mit Gültigkeitsdatum)"
-  number: {required: true, description: Rechnungs- bzw. Angebotsnummer}
-  valid_days: Angebot gültig für n Tage (Standard 30)
-  date: Rechnungsdatum (Standard heute)
-  customer_number: Kundennummer
-  service_date: Leistungsdatum
-  service_period: Leistungszeitraum (freier Text, z. B. 'September 2026')
-  items: {required: true, description: "Positionen: Liste aus {desc, qty, unit, price, detail}"}
-  vat: USt-Satz in Prozent (Standard 19)
-  small_business: Kleinunternehmer nach §19 UStG – keine USt (true/false)
-  due_days: Zahlungsziel in Tagen (Standard 14)
-  payment_note: Eigener Zahlungshinweis statt des Standardtexts
-  opening: Anrede
-  closing: Grußformel
+  sender.name: {required: true, description: "Issuer (texify.toml [defaults.sender])"}
+  sender.street: {required: true, description: Street and number}
+  sender.zip: {required: true, description: Postcode}
+  sender.city: {required: true, description: City}
+  sender.tax_id: Tax number (or sender.vat_id)
+  sender.vat_id: VAT ID
+  sender.bank: "Bank details: {name, iban, bic}"
+  recipient: {required: true, description: "Billing address, several lines (YAML: recipient: |)"}
+  kind: "invoice (default) or quote (with a validity date)"
+  number: {required: true, description: Invoice or quote number}
+  valid_days: Quote valid for n days (default 30)
+  date: Invoice date (default today)
+  customer_number: Customer number
+  service_date: Date of service
+  service_period: Service period (free text, e.g. 'September 2026')
+  items: {required: true, description: "Line items: list of {desc, qty, unit, price, detail}"}
+  vat: VAT rate in percent (default 19)
+  small_business: Small business, no VAT charged (§19 UStG) (true/false)
+  due_days: Payment term in days (default 14)
+  payment_note: Custom payment note instead of the default text
+  opening: Salutation
+  closing: Closing
 defaults:
   kind: invoice
   valid_days: 30

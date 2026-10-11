@@ -1,51 +1,47 @@
 ---
 template: contract
-subtitle: über freie Mitarbeit
+subtitle: for freelance services
 place: Leipzig
 parties:
-  - role: Auftraggeber
-    name: Beispiel GmbH
+  - role: Client
+    name: Example Ltd.
     address: |
-      Hauptstraße 5
+      5 High Street
       10115 Berlin
-    rep: Geschäftsführerin Erika Musterfrau
-    signatory: Erika Musterfrau
+    rep: Managing Director Jordan Sample
+    signatory: Jordan Sample
     place: Berlin
-  - role: Auftragnehmer
-    name: Max Mustermann
+  - role: Contractor
+    name: Alex Example
     address: |
-      Musterstraße 1
+      1 Sample Street
       04109 Leipzig
 ---
 
-# Dienstleistungsvertrag
+# Service Agreement
 
-# Vertragsgegenstand
+# Subject matter
 
-1. Der Auftragnehmer übernimmt für den Auftraggeber die Beratung bei der
-   Einführung einer CI/CD-Plattform.
-2. Einzelheiten ergeben sich aus dem Angebot Nr. 2026-031, das Bestandteil
-   dieses Vertrags ist.
+1. The contractor advises the client on the introduction of a CI/CD platform.
+2. Details are set out in quote no. 2026-031, which forms part of this agreement.
 
-# Vergütung
+# Remuneration
 
-1. Der Auftragnehmer erhält ein Honorar von **110 € je Stunde** zuzüglich der
-   gesetzlichen Umsatzsteuer.
-2. Die Abrechnung erfolgt monatlich; Rechnungen sind innerhalb von 14 Tagen
-   ohne Abzug zahlbar.
+1. The contractor receives a fee of **€110 per hour** plus statutory VAT.
+2. Invoices are issued monthly and are payable within 14 days without deduction.
 
-# Laufzeit und Kündigung
+# Term and termination
 
-1. Der Vertrag beginnt am 1. November 2026 und endet am 30. April 2027.
-2. Das Recht zur außerordentlichen Kündigung bleibt unberührt.
+1. The agreement starts on 1 November 2026 and ends on 30 April 2027.
+2. The right to terminate for good cause remains unaffected.
 
-# Vertraulichkeit
+# Confidentiality
 
-Der Auftragnehmer verpflichtet sich, über alle ihm bekannt gewordenen
-Geschäftsgeheimnisse Stillschweigen zu bewahren – auch nach Vertragsende.
+The contractor shall keep all business secrets confidential, also after the
+end of the agreement.
 
-# Schlussbestimmungen
+# Final provisions
 
-1. Änderungen und Ergänzungen bedürfen der Textform.
-2. Sollte eine Bestimmung unwirksam sein, bleibt die Wirksamkeit der übrigen
-   Bestimmungen unberührt.
+1. Amendments must be made in text form.
+2. Should any provision be invalid, the validity of the remaining provisions
+   shall not be affected.

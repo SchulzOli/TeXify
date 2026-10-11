@@ -19,7 +19,7 @@ def _docx_to_markdown(path: Path) -> str:
     try:
         import docx  # python-docx
     except ImportError:
-        raise TexifyError("DOCX-Import braucht python-docx:  pip install \"texify[docx]\"") from None
+        raise TexifyError("DOCX import needs python-docx:  pip install \"texify[docx]\"") from None
     d = docx.Document(str(path))
     out: list[str] = []
     for p in d.paragraphs:
@@ -48,7 +48,7 @@ def _docx_to_markdown(path: Path) -> str:
 def _pdf_to_markdown(path: Path) -> str:
     text = extract_text(path)
     if not text.strip():
-        raise TexifyError(f"{path.name}: kein Textlayer gefunden (gescannt?). Bitte zuerst OCR anwenden.")
+        raise TexifyError(f"{path.name}: no text layer found (scanned?). Run OCR first.")
     # A line continues the previous one only if that one did not end a sentence
     # and this one starts in lower case (hard-wrapped paragraph); otherwise it is
     # its own paragraph (headings, address lines, table rows ...).
@@ -75,7 +75,7 @@ def to_markdown(path: Path, template: str | None = None) -> str:
     elif suffix == ".txt":
         body = path.read_text(encoding="utf-8-sig")
     else:
-        raise TexifyError(f"Import von {suffix or 'Dateien ohne Endung'} nicht unterstützt (pdf, docx, txt, md)")
+        raise TexifyError(f"Cannot import {suffix or 'files without extension'} (supported: pdf, docx, txt, md)")
     title = path.stem.replace("_", " ").replace("-", " ").strip()
     front = f"---\ntemplate: {template or 'article'}\ntitle: {json.dumps(title, ensure_ascii=False)}\n---\n\n"
     return front + body

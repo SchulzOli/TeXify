@@ -19,12 +19,14 @@ from . import TexifyError
 CONFIG_NAME = "texify.toml"
 
 BUILTIN: dict[str, Any] = {
-    # lang/font/currency fall back to de/sans/EUR at render time, so that
+    # lang/font/currency fall back to en/sans/EUR at render time, so that
     # template defaults (e.g. a serif contract) are not overridden here
     "defaults": {},
     "build": {"engine": "auto", "out_dir": "", "docker_image": "texify:latest"},
     "templates": {"paths": ["templates"]},
-    "ai": {"backend": "auto", "model": "claude-opus-5-5", "effort": "high", "attempts": 3},
+    # AI is provider-agnostic: any command that reads a prompt on stdin and
+    # prints the answer on stdout. Empty = AI only through the MCP server.
+    "ai": {"command": "", "attempts": 3, "timeout": 900},
 }
 
 
@@ -57,7 +59,7 @@ def _load_toml(path: Path) -> dict:
     try:
         return tomllib.loads(path.read_text(encoding="utf-8"))
     except tomllib.TOMLDecodeError as exc:
-        raise TexifyError(f"{path}: ungültiges TOML: {exc}") from None
+        raise TexifyError(f"{path}: invalid TOML: {exc}") from None
 
 
 @dataclass
@@ -102,40 +104,42 @@ def load_config(start: Path | None = None) -> Config:
 
 
 INIT_TEMPLATE = """\
-# TeXify Projekt-Konfiguration
-# Alles unter [defaults] gilt als Vorbelegung für JEDES Dokument in diesem Ordner
-# (und Unterordnern). Das Frontmatter eines Dokuments überschreibt diese Werte.
+# TeXify project configuration
+# Everything under [defaults] pre-fills EVERY document in this folder (and its
+# subfolders). A document's frontmatter overrides these values.
 
 [defaults]
-lang = "de"            # de | en
-accent = "1F4E79"      # Akzentfarbe (Hex)
-# font = "sans"        # sans | serif – sonst entscheidet das Template (z. B. Vertrag: serif)
+lang = "en"            # en | de
+accent = "1F4E79"      # accent colour (hex)
+# font = "sans"        # sans | serif – otherwise the template decides (contract: serif)
 # currency = "EUR"
 
-[defaults.sender]      # Absender für Briefe, Rechnungen, Bestätigungen
-name = "Max Mustermann"
-street = "Musterstraße 1"
+[defaults.sender]      # sender for letters, invoices, confirmations
+name = "Alex Example"
+street = "1 Sample Street"
 zip = "12345"
-city = "Musterstadt"
+city = "Sampletown"
 phone = "+49 170 1234567"
-email = "max@example.com"
+email = "alex@example.com"
 # web = "example.com"
-# tax_id = "123/456/78901"        # Steuernummer (Rechnung)
-# vat_id = "DE123456789"          # USt-IdNr. (Rechnung)
+# tax_id = "123/456/78901"        # tax number (invoices)
+# vat_id = "DE123456789"          # VAT ID (invoices)
 
 # [defaults.sender.bank]
-# name = "Musterbank"
+# name = "Example Bank"
 # iban = "DE00 0000 0000 0000 0000 00"
 # bic = "XXXXDEXXXXX"
 
 [build]
 engine = "auto"        # auto | tectonic | latexmk | pdflatex | xelatex | lualatex | docker
-out_dir = ""           # leer = PDF neben der Quelldatei
+out_dir = ""           # empty = PDF next to the source file
 
 [templates]
-paths = ["templates"]  # eigene Templates (überschreiben eingebaute mit gleichem Namen)
+paths = ["templates"]  # your own templates (override built-ins with the same name)
 
 [ai]
-backend = "auto"       # auto | anthropic | claude-cli
-model = "claude-opus-5-5"
+# Optional, for `texify ai ...` on the command line. Any LLM tool that reads the
+# prompt on stdin and prints the answer, e.g. "llm -m gpt-4o", "ollama run
+# llama3.1", "claude -p". Leave empty to use AI only through the MCP server.
+command = ""
 """

@@ -1,8 +1,25 @@
+# One image, two uses:
+#
+#   docker compose up -d mcp
+#       ONE shared MCP server (Streamable HTTP) for every AI client:
+#       http://localhost:8747/mcp  – documents live in ${TEXIFY_WORKSPACE:-./workspace}
+#
+#   docker compose run --rm cli build examples/08-invoice.md
+#       the texify command line with TeX Live, on the project folder
 services:
-  texify:
+  mcp:
     build: .
     image: texify:latest
+    command: ["mcp", "--http", "--host", "0.0.0.0", "--port", "8747", "--workspace", "/work"]
+    ports:
+      - "127.0.0.1:8747:8747"   # local clients only; see README to expose it on a network
     volumes:
-      - ./:/work          # project folder (documents, templates, texify.toml)
+      - ${TEXIFY_WORKSPACE:-./workspace}:/work
+    restart: unless-stopped
+
+  cli:
+    image: texify:latest
+    profiles: ["cli"]
+    volumes:
+      - ./:/work
     working_dir: /work
-    stdin_open: true      # needed for `docker compose run --rm texify mcp`

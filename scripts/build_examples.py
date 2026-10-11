@@ -3,10 +3,10 @@
     python scripts/build_examples.py            (needs a LaTeX engine or Docker)
 
 Outputs (all committed, so GitHub shows the results):
-  examples/pdf/<name>.pdf        one PDF per example
-  examples/pdf/bewerbungsmappe.pdf   cover page + letter + CV, with bookmarks
-  examples/previews/<name>.png   first-page thumbnail (needs pypdfium2)
-  examples/README.md             gallery, generated from the example files
+  examples/pdf/<name>.pdf            one PDF per example
+  examples/pdf/application.pdf       cover page + cover letter + CV, with bookmarks
+  examples/previews/<name>.png       first-page thumbnail (needs pypdfium2)
+  examples/README.md                 gallery, generated from the example files
 """
 
 from __future__ import annotations
@@ -20,42 +20,40 @@ sys.path.insert(0, str(ROOT))
 from texify.build import build  # noqa: E402
 from texify.config import load_config  # noqa: E402
 from texify.pdftools import merge  # noqa: E402
-from texify.templates import get_template  # noqa: E402
 
 EXAMPLES = ROOT / "examples"
 PDF = EXAMPLES / "pdf"
 PREVIEWS = EXAMPLES / "previews"
-BUNDLE = ["13-deckblatt", "05-anschreiben", "11-lebenslauf"]
+BUNDLE = ["13-application-cover", "05-cover-letter", "11-cv-classic"]
 COLUMNS = 3
 
-
 TYPES = {
-    "01-bericht": "Bericht",
-    "02-anleitung": "Anleitung",
-    "03-lastenheft": "Lastenheft",
-    "04-pressemitteilung": "Pressemitteilung",
-    "05-anschreiben": "Bewerbungsanschreiben",
-    "06-kuendigung": "Kündigung",
-    "07-mahnung": "Zahlungserinnerung",
-    "08-rechnung": "Rechnung",
-    "09-rechnung-kleinunternehmer": "Rechnung (Kleinunternehmer)",
-    "10-angebot": "Angebot",
-    "11-lebenslauf": "Lebenslauf (tabellarisch)",
-    "12-cv-english": "CV (modern, English)",
-    "13-deckblatt": "Bewerbungs-Deckblatt",
-    "14-projektantrag": "Projektantrag",
-    "15-teilnahmebestaetigung": "Teilnahmebestätigung",
-    "16-arbeitszeugnis": "Arbeitszeugnis",
-    "17-vollmacht": "Vollmacht",
-    "18-protokoll": "Protokoll",
-    "19-einladung": "Einladung",
-    "20-zertifikat": "Zertifikat",
-    "21-vertrag": "Vertrag",
+    "01-report": "Report",
+    "02-how-to-guide": "How-to guide",
+    "03-requirements-spec": "Requirements specification",
+    "04-press-release": "Press release",
+    "05-cover-letter": "Cover letter",
+    "06-cancellation": "Cancellation letter",
+    "07-payment-reminder": "Payment reminder",
+    "08-invoice": "Invoice",
+    "09-invoice-small-business": "Invoice (VAT-exempt small business)",
+    "10-quote": "Quote",
+    "11-cv-classic": "CV (classic, tabular)",
+    "12-cv-modern": "CV (modern, cards)",
+    "13-application-cover": "Application cover page",
+    "14-project-proposal": "Project proposal",
+    "15-certificate-of-attendance": "Certificate of attendance",
+    "16-employment-reference": "Employment reference",
+    "17-power-of-attorney": "Power of attorney",
+    "18-meeting-minutes": "Meeting minutes",
+    "19-invitation": "Invitation",
+    "20-certificate": "Certificate",
+    "21-service-agreement": "Service agreement",
 }
 
 
 def title_of(doc_path: Path) -> str:
-    return TYPES.get(doc_path.stem, doc_path.stem.split("-", 1)[-1].replace("-", " ").title())
+    return TYPES.get(doc_path.stem, doc_path.stem.split("-", 1)[-1].replace("-", " ").capitalize())
 
 
 def render_preview(pdf: Path, png: Path) -> None:
@@ -74,15 +72,14 @@ def main() -> int:
     rows = []
     for src in sorted(EXAMPLES.glob("[0-9][0-9]-*.md")):
         result = build(src, output=PDF / f"{src.stem}.pdf", cfg=cfg)
-        print(f"✓ {src.name:34} [{result.template}]")
+        print(f"✓ {src.name:36} [{result.template}]")
         render_preview(result.pdf, PREVIEWS / f"{src.stem}.png")
-        tpl = get_template(result.template, cfg)
-        rows.append((src, result.template, tpl.description, title_of(src)))
+        rows.append((src, result.template, title_of(src)))
 
     parts = [PDF / f"{name}.pdf" for name in BUNDLE]
-    merge(parts, PDF / "bewerbungsmappe.pdf", bookmarks=True,
-          titles=["Deckblatt", "Anschreiben", "Lebenslauf"])
-    print("✓ bewerbungsmappe.pdf")
+    merge(parts, PDF / "application.pdf", bookmarks=True,
+          titles=["Cover page", "Cover letter", "Curriculum vitae"])
+    print("✓ application.pdf")
 
     write_gallery(rows)
     print("✓ examples/README.md")
@@ -91,34 +88,33 @@ def main() -> int:
 
 def write_gallery(rows) -> None:
     lines = [
-        "# Beispiele",
+        "# Examples",
         "",
-        f"{len(rows)} Dokumenttypen, jeweils aus einer kurzen Markdown-Datei erzeugt.",
-        "Absender und Bankdaten kommen aus [texify.toml](texify.toml) und müssen",
-        "deshalb in keinem Dokument wiederholt werden.",
+        f"{len(rows)} document types, each generated from a short Markdown file.",
+        "Sender and bank details come from [texify.toml](texify.toml), so no",
+        "document has to repeat them.",
         "",
         "```bash",
         "cd examples",
-        "texify build 08-rechnung.md          # -> pdf/08-rechnung.pdf",
-        "python ../scripts/build_examples.py  # alle Beispiele + Galerie neu erzeugen",
+        "texify build 08-invoice.md            # -> pdf/08-invoice.pdf",
+        "python ../scripts/build_examples.py   # rebuild every example + this gallery",
         "```",
         "",
-        "**Bewerbungsmappe** aus Deckblatt, Anschreiben und Lebenslauf, mit Lesezeichen:",
+        "**Job application bundle** from cover page, cover letter and CV, with bookmarks:",
         "",
         "```bash",
-        "texify build " + " ".join(f"{n}.md" for n in BUNDLE) + " -o pdf/bewerbungsmappe.pdf --bookmarks",
+        "texify build " + " ".join(f"{n}.md" for n in BUNDLE) + " -o pdf/application.pdf --bookmarks",
         "```",
         "",
-        "Ergebnis: [pdf/bewerbungsmappe.pdf](pdf/bewerbungsmappe.pdf)",
+        "Result: [pdf/application.pdf](pdf/application.pdf)",
         "",
-        "<!-- Automatisch erzeugt von scripts/build_examples.py – nicht von Hand bearbeiten. -->",
+        "<!-- Generated by scripts/build_examples.py – do not edit by hand. -->",
         "",
     ]
-    header = "| " + " | ".join([" "] * COLUMNS) + " |"
-    lines += [header, "|" + "---|" * COLUMNS]
+    lines += ["| " + " | ".join([" "] * COLUMNS) + " |", "|" + "---|" * COLUMNS]
     for i in range(0, len(rows), COLUMNS):
         cells = []
-        for src, template, _, title in rows[i:i + COLUMNS]:
+        for src, template, title in rows[i:i + COLUMNS]:
             stem = src.stem
             cells.append(
                 f"<a href=\"pdf/{stem}.pdf\"><img src=\"previews/{stem}.png\" width=\"240\"></a><br>"
@@ -126,8 +122,8 @@ def write_gallery(rows) -> None:
             )
         cells += [" "] * (COLUMNS - len(cells))
         lines.append("| " + " | ".join(cells) + " |")
-    lines += ["", "## Übersicht", "", "| Typ | Datei | Template |", "|---|---|---|"]
-    for src, template, _, title in rows:
+    lines += ["", "## Overview", "", "| Type | File | Template |", "|---|---|---|"]
+    for src, template, title in rows:
         lines.append(f"| {title} | [{src.name}]({src.name}) | `{template}` |")
     (EXAMPLES / "README.md").write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 

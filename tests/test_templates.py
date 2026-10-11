@@ -82,7 +82,7 @@ def test_template_default_font_wins_over_builtin(tmp_path):
     doc = tmp_path / "v.md"
     doc.write_text("---\ntemplate: contract\nparties: [{role: A, name: B, address: C}]\n---\n# Vertrag\n",
                    encoding="utf-8")
-    assert "\\usepackage[de,serif]{texify}" in render_to_string(doc)
+    assert "\\usepackage[en,serif]{texify}" in render_to_string(doc)
 
 
 def test_parse_document_without_frontmatter():
