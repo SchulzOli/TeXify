@@ -27,6 +27,8 @@
   \RequirePackage{lmodern}
   \iftexify@serif
     \RequirePackage{tgpagella}
+    % headings (\sffamily) stay TeX Gyre Heros, as in the XeTeX branch
+    \RequirePackage{tgheros}
   \else
     \RequirePackage{tgheros}
     \renewcommand{\familydefault}{\sfdefault}

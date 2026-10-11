@@ -14,6 +14,9 @@
 \setplength{firstheadwidth}{\textwidth}
 \setplength{firstfoothpos}{2.5cm}
 \setplength{firstfootwidth}{\textwidth}
+% explicit footer position: KOMA versions differ in how they derive it after
+% geometry, which made pdfLaTeX (TeX Live) and Tectonic place it differently
+\setplength{firstfootvpos}{\dimexpr\paperheight-3.2cm\relax}
 \setplength{toaddrhpos}{2.5cm}
 \setplength{toaddrwidth}{8.5cm}
 \setplength{refhpos}{2.5cm}

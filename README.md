@@ -46,13 +46,18 @@ Pick one:
   docker compose run --rm cli build examples/08-invoice.md
   ```
 
-TeXify needs a LaTeX engine. `texify doctor` shows what it finds. Without a
-local TeX installation it builds through the Docker image automatically
-(`docker compose build` once).
+TeXify needs a LaTeX engine. `texify doctor` shows what it finds:
 
-Supported engines, in order of preference: `tectonic`, `latexmk`, `pdflatex`,
-`xelatex`, `lualatex`, `docker`. Force one with `-e`, the environment variable
-`TEXIFY_ENGINE` or in `texify.toml`.
+| Engine | Setup | Notes |
+|---|---|---|
+| **Tectonic** (recommended locally) | download the single binary from [tectonic-typesetting.github.io](https://tectonic-typesetting.github.io) and put it on your `PATH` | fetches LaTeX packages on first use (~150 MB, once); afterwards 1–4 s per document |
+| **Docker** | `docker compose build` once | TeX Live in the image; used automatically when nothing else is installed |
+| TeX Live / MiKTeX | install the distribution | uses `latexmk`, `pdflatex`, `xelatex` or `lualatex` |
+
+All built-in templates are tested with both pdfLaTeX (Docker) and Tectonic
+(XeTeX) and produce the same layout. Engines are tried in this order:
+`tectonic`, `latexmk`, `pdflatex`, `xelatex`, `lualatex`, `docker`. Force one
+with `-e`, the environment variable `TEXIFY_ENGINE` or in `texify.toml`.
 
 ## Quick start
 
