@@ -15,6 +15,7 @@ Sources: `pyproject.toml`, all templates (`\usepackage`), `Dockerfile`.
 | python-docx | docx | MIT | https://pypi.org/project/python-docx/ |
 | pytest | dev | MIT | https://pypi.org/project/pytest/ |
 | pypdfium2 | dev | BSD-3-Clause, Apache-2.0, dependency lic | https://pypi.org/project/pypdfium2/ |
+| pillow | dev | MIT-CMU | https://pypi.org/project/pillow/ |
 
 ## LaTeX packages (TeX Live / CTAN)
 

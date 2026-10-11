@@ -19,7 +19,7 @@ dependencies = [
 mcp = ["mcp>=1.10,<2"]
 docx = ["python-docx>=1.1"]
 all = ["texify[mcp,docx]"]
-dev = ["texify[all]", "pytest>=8", "pypdfium2>=4"]
+dev = ["texify[all]", "pytest>=8", "pypdfium2>=4", "pillow>=10"]
 
 [project.scripts]
 texify = "texify.cli:main"
