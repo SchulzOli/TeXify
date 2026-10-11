@@ -12,10 +12,11 @@ accent: 2E7D32
 
 ## Installation
 
-TeXify is a Python package. Installing it takes less than a minute:
+TeXify is a single binary. Download it from the releases page or install it
+with Cargo – it takes less than a minute:
 
 ```
-pip install -e ".[all]"
+cargo install --git https://github.com/SchulzOli/TeXify texify
 texify doctor
 ```
 

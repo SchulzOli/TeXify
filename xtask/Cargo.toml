@@ -1,0 +1,11 @@
+[package]
+name = "xtask"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+texify = { path = ".." }
+anyhow = "1"
+regex = "1"
+serde_json = "1"

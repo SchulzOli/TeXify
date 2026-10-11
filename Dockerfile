@@ -1,20 +1,31 @@
-# TeXify: TeX Live + texify CLI/MCP in one image.
+# TeXify: TeX Live + the texify binary in one image.
 #
 #   docker compose build
-#   docker compose run --rm texify build dokumente/brief.md
-#   docker run -i --rm -v "$PWD:/work" texify:latest mcp      # MCP over stdio
+#   docker compose up -d mcp                                   # shared MCP server
+#   docker compose run --rm cli build examples/08-invoice.md   # command line
 #
 # The local CLI also uses this image as LaTeX engine when no TeX is installed
 # (engine "docker": runs latexmk inside the container).
-FROM python:3.12-slim
 
-ENV DEBIAN_FRONTEND=noninteractive \
-    PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
+# ---------------------------------------------------------------- build
+FROM rust:1-trixie AS build
+WORKDIR /src
+COPY Cargo.toml Cargo.lock ./
+COPY xtask/Cargo.toml xtask/Cargo.toml
+COPY src src
+COPY assets assets
+COPY xtask/src xtask/src
+RUN cargo build --release --locked --bin texify
 
-# TeX Live: latex-extra covers tcolorbox, paracol, titlesec, ...;
-# fonts-recommended brings TeX Gyre; lang-german for babel ngerman.
-# The deb.debian.org mirror is flaky -> apt-get in a retry loop.
+# ---------------------------------------------------------------- runtime
+FROM debian:trixie-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# TeX Live: latex-extra covers tcolorbox, paracol, pgfornament, ...;
+# tex-gyre = template fonts; lang-german for babel ngerman;
+# poppler-utils renders preview images (cargo xtask examples).
+# The Debian mirror can be flaky -> apt-get in a retry loop.
 RUN set -e; \
     for i in 1 2 3 4 5 6 7 8; do \
       apt-get update && \
@@ -30,15 +41,14 @@ RUN set -e; \
         texlive-lang-english \
         lmodern \
         latexmk \
+        poppler-utils \
+        ca-certificates \
       && break; \
       echo "apt attempt $i failed, retrying..."; sleep 5; \
     done; \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
-COPY pyproject.toml README.md /app/
-COPY texify /app/texify
-RUN pip install --no-cache-dir --retries 10 "/app[mcp,docx]"
+COPY --from=build /src/target/release/texify /usr/local/bin/texify
 
 ENV TEXIFY_ENGINE=latexmk
 WORKDIR /work

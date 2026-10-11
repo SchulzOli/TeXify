@@ -1,7 +1,4 @@
-__pycache__/
-*.egg-info/
-.venv/
-.pytest_cache/
+target/
 build/
 dist/
 out/
@@ -17,3 +14,4 @@ data/
 
 # shared MCP server workspace (docker compose up -d mcp)
 workspace/
+.parity/

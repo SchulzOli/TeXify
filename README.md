@@ -7,6 +7,9 @@ certificates and more. It also organises PDFs (merge, select pages, build
 application bundles) and ships **one MCP server that works with every AI
 client**.
 
+TeXify is a **single self-contained binary written in Rust** – all templates
+are embedded, no Python or other runtime needed.
+
 <p align="center">
   <a href="examples/"><img src="examples/previews/11-cv-classic.png" width="190"></a>
   <a href="examples/"><img src="examples/previews/08-invoice.png" width="190"></a>
@@ -25,23 +28,31 @@ client**.
 
 ## Installation
 
-```bash
-pip install -e ".[all]"
-```
+Pick one:
+
+- **Pre-built binary** (Linux, Windows, macOS): download it from the
+  [releases](https://github.com/SchulzOli/TeXify/releases) and put `texify`
+  on your `PATH`.
+- **From source** (Rust ≥ 1.85):
+
+  ```bash
+  cargo install --git https://github.com/SchulzOli/TeXify texify
+  ```
+
+- **Docker only** (TeX Live included, nothing else to install):
+
+  ```bash
+  docker compose build
+  docker compose run --rm cli build examples/08-invoice.md
+  ```
 
 TeXify needs a LaTeX engine. `texify doctor` shows what it finds. Without a
-local TeX installation it builds through the Docker image automatically:
-
-```bash
-docker compose build
-```
+local TeX installation it builds through the Docker image automatically
+(`docker compose build` once).
 
 Supported engines, in order of preference: `tectonic`, `latexmk`, `pdflatex`,
 `xelatex`, `lualatex`, `docker`. Force one with `-e`, the environment variable
 `TEXIFY_ENGINE` or in `texify.toml`.
-
-If `texify` is not on your `PATH` after installation, every command also works
-as `python -m texify …`.
 
 ## Quick start
 
@@ -112,8 +123,8 @@ texify tex letter.md              # LaTeX only (complete project folder)
 `./templates/<name>/` (project) or `~/.texify/templates/<name>/` (global) and
 take precedence over the built-in ones. The shared design (fonts, colours,
 tables, lists) lives in
-[texify/templates/_shared/texify.sty](texify/templates/_shared/texify.sty);
-the authoring rules are in [texify/guide.md](texify/guide.md).
+[assets/templates/_shared/texify.sty](assets/templates/_shared/texify.sty);
+the authoring rules are in [assets/guide.md](assets/guide.md) (also: `texify templates guide`).
 
 ## Organising PDFs
 
@@ -164,7 +175,7 @@ TEXIFY_WORKSPACE=~/Documents/texify docker compose up -d mcp
 
 ```bash
 texify mcp config --http                  # connect to the shared HTTP server
-texify mcp config --workspace ~/Documents/texify   # stdio, local Python
+texify mcp config --workspace ~/Documents/texify   # stdio, local binary
 texify mcp config --docker --workspace ~/Documents/texify   # stdio inside Docker
 ```
 
@@ -216,30 +227,36 @@ back to the model automatically for correction (up to 3 attempts by default).
 ## Project layout
 
 ```
-texify/
-  cli.py          command line
-  build.py        pipeline document -> LaTeX -> PDF
-  markdown.py     Markdown -> LaTeX (markdown-it-py, heading map, tables)
-  templates.py    template discovery, Jinja environment, filters
-  engine.py       engine detection, compiling, error excerpt
-  config.py       texify.toml
-  pdftools.py     merge, pages, info
-  importers.py    PDF/DOCX/TXT -> Markdown
-  ai.py           AI tasks with test-build loop (any LLM command)
-  mcp_server.py   MCP server (stdio + Streamable HTTP)
-  guide.md        template authoring guide (for people and AI)
-  templates/      built-in templates + _shared/texify.sty
-examples/         21 example documents with PDFs and previews
-tests/            pytest (compile tests run when an engine is available)
-scripts/          build_examples.py, third_party.py (-> THIRD_PARTY.md)
+src/
+  main.rs, cli.rs   command line (clap)
+  build.rs          pipeline document -> LaTeX -> PDF
+  markdown.rs       Markdown -> LaTeX (comrak, heading map, tables)
+  templates.rs      template discovery (embedded + disk), Jinja environment (minijinja), filters
+  engine.rs         engine detection, compiling, error excerpt
+  config.rs         texify.toml
+  yaml.rs           YAML without YAML 1.1 number surprises
+  latex.rs          escaping, dates, numbers, money
+  pdftools.rs       merge, pages, info, text (lopdf)
+  importers.rs      PDF/DOCX/TXT -> Markdown
+  ai.rs             AI tasks with test-build loop (any LLM command)
+  mcp.rs            MCP server (rmcp; stdio + Streamable HTTP)
+assets/
+  guide.md          template authoring guide (for people and AI)
+  templates/        built-in templates + _shared/texify.sty (embedded into the binary)
+examples/           21 example documents with PDFs and previews
+tests/              integration tests (compile tests run when an engine is available)
+xtask/              cargo xtask examples | third-party
 ```
 
 ## Development
 
 ```bash
-pip install -e ".[dev]"
-pytest
-python scripts/build_examples.py       # rebuild examples, previews and gallery
-python scripts/third_party.py          # update the list of open-source components
-python scripts/third_party.py --check  # in CI: fails when outdated
+cargo test --workspace
+cargo clippy --workspace --all-targets -- -D warnings
+cargo xtask examples                   # rebuild examples, previews and gallery
+cargo xtask third-party                # update the list of open-source components
+cargo xtask third-party --check        # in CI: fails when outdated
 ```
+
+Releases: push a tag `vX.Y.Z`; GitHub Actions builds binaries for Linux,
+Windows and macOS.

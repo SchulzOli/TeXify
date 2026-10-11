@@ -1,0 +1,49 @@
+[package]
+name = "texify"
+version = "0.3.0"
+edition = "2024"
+description = "Markdown/Text -> LaTeX -> PDF: professional documents from plain text files (CLI + MCP server)"
+repository = "https://github.com/SchulzOli/TeXify"
+readme = "README.md"
+rust-version = "1.85"
+
+[workspace]
+members = ["xtask"]
+
+[[bin]]
+name = "texify"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0.104"
+axum = "0.8.9"
+chrono = "0.4.45"
+clap = { version = "4.6.7", features = ["derive"] }
+comrak = { version = "0.55.0", default-features = false }
+include_dir = "0.7.4"
+lopdf = "0.42.0"
+minijinja = { version = "3.0.0", features = ["serde", "preserve_order", "json", "loop_controls"] }
+minijinja-contrib = { version = "3.0.0", features = ["pycompat"] }
+quick-xml = "0.41.0"
+regex = "1.13.1"
+rmcp = { version = "2.2.0", features = ["server", "transport-io", "transport-streamable-http-server", "macros"] }
+rust_decimal = "1.43.0"
+schemars = "1.2.2"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = { version = "1.0.153", features = ["preserve_order"] }
+shlex = "2.0.1"
+tempfile = "3.27.0"
+tokio = { version = "1.53.2", features = ["rt-multi-thread", "macros", "io-std", "net", "signal"] }
+toml = { version = "1.1.8", features = ["preserve_order"] }
+which = "8.0.6"
+yaml-rust2 = "0.13.0"
+zip = "7.2.0"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+
+[dev-dependencies]
+tempfile = "3"
+regex = "1"
