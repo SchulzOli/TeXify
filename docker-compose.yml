@@ -1,0 +1,10 @@
+services:
+  texify:
+    build: .
+    image: texify:latest
+    container_name: texify
+    ports:
+      - "8000:8000"        # web UI -> http://localhost:8000
+    volumes:
+      - ./data:/data       # all documents (PDF/DOCX/TEX/PDF output) live here
+    restart: unless-stopped

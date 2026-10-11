@@ -1,0 +1,16 @@
+__pycache__/
+*.egg-info/
+.venv/
+.pytest_cache/
+build/
+dist/
+out/
+.texify-build/
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+# persoenliche Arbeitsdaten
+data/

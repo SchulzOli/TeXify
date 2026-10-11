@@ -1,0 +1,1 @@
+Create a System that build me a document from text input.or from any other type of file into latex and rom that in any other format back again. use as muchopensource code as possible.list them ina specify syncableandgenerated file to keep track of them. if there is asolution for that as well, use it. 
