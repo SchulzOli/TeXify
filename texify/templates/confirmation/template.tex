@@ -1,0 +1,66 @@
+\documentclass[fontsize=11pt,paper=a4,parskip=half]{scrartcl}
+\usepackage[\VAR{lang},\VAR{font}]{texify}
+\usepackage[a4paper,top=2cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\texifyaccent{\VAR{accent}}
+\pagestyle{empty}
+
+\hypersetup{pdftitle={\VAR{title or txt.title}},pdfauthor={\VAR{sender.name}}}
+
+\begin{document}
+% ---------------------------------------------------------------- letterhead
+\noindent
+%: if logo
+\begin{minipage}[t]{0.45\linewidth}
+\vspace{0pt}\includegraphics[height=1.6cm]{\VAR{logo|asset}}
+\end{minipage}%
+%: endif
+\hfill
+\begin{minipage}[t]{0.5\linewidth}
+\vspace{0pt}\raggedleft\small
+{\color{accent}\bfseries\large \VAR{sender.name}\par}
+\color{texifymuted}
+\VAR{sender.street}\BLOCK{if sender.street}\\\BLOCK{endif}
+\VAR{sender.zip} \VAR{sender.city}\BLOCK{if sender.city}\\\BLOCK{endif}
+\VAR{sender.phone}\BLOCK{if sender.phone}\\\BLOCK{endif}
+\VAR{sender.email}
+\end{minipage}
+\par\medskip
+{\color{accent}\rule{\linewidth}{0.8pt}}
+\vspace{2cm}
+
+% ---------------------------------------------------------------- title
+\begin{center}
+{\usekomafont{disposition}\color{accent}\fontsize{26}{31}\selectfont \VAR{(title or txt.title)|md}\par}
+%: if subtitle
+\vspace{6pt}{\large\color{texifymuted}\VAR{subtitle|md}\par}
+%: endif
+\end{center}
+\vspace{1.2cm}
+
+%: if person
+%: set intro_text = txt.hereby if intro is undefined or intro is none else intro
+\begin{center}
+%: if intro_text
+{\color{texifymuted}\VAR{intro_text}}\par\medskip
+%: endif
+{\Large\bfseries \VAR{person|md}}\par
+%: if person_details
+\smallskip{\color{texifymuted}\VAR{person_details|lines}}\par
+%: endif
+\end{center}
+\vspace{0.8cm}
+%: endif
+
+\VAR{body}
+
+% ---------------------------------------------------------------- signature
+\vfill
+\noindent
+\begin{tabularx}{\linewidth}{@{}p{0.42\linewidth}@{\hspace{0.16\linewidth}}p{0.42\linewidth}@{}}
+\VAR{place or sender.city}\BLOCK{if place or sender.city}, \BLOCK{endif}\VAR{date|date} &
+\BLOCK{if signature}\includegraphics[height=1.3cm]{\VAR{signature|asset}}\BLOCK{endif} \\[\BLOCK{if signature}2pt\BLOCK{else}1cm\BLOCK{endif}]
+\rule{\linewidth}{0.4pt} & \rule{\linewidth}{0.4pt} \\
+{\small\color{texifymuted}\VAR{txt.place_date}} &
+{\small\color{texifymuted}\VAR{signer.name or sender.name}\BLOCK{if signer.role}, \VAR{signer.role}\BLOCK{endif}}
+\end{tabularx}
+\end{document}

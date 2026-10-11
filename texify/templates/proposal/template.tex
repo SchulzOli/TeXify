@@ -1,0 +1,68 @@
+\documentclass[fontsize=11pt,paper=a4,parskip=half]{scrartcl}
+\usepackage[\VAR{lang},\VAR{font}]{texify}
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{scrlayer-scrpage}
+\usepackage[most]{tcolorbox}
+\texifyaccent{\VAR{accent}}
+
+\addtokomafont{disposition}{\color{accent}}
+\setcounter{secnumdepth}{\VAR{2 if numbered else 0}}
+
+\clearpairofpagestyles
+\setkomafont{pageheadfoot}{\small\color{texifymuted}}
+\ihead{\VAR{txt.proposal}: \VAR{title|md}}
+\ofoot*{\pagemark}
+\pagestyle{scrheadings}
+
+\hypersetup{pdftitle={\VAR{title}},pdfauthor={\VAR{applicant or author}}}
+
+\begin{document}
+\thispagestyle{plain.scrheadings}
+{\color{texifymuted}\small\bfseries\texifyspaced{\MakeUppercase{\VAR{kind or txt.proposal}}}\par}
+\vspace{4pt}
+{\usekomafont{disposition}\fontsize{24}{29}\selectfont \VAR{title|md}\par}
+%: if subtitle
+\vspace{6pt}{\Large\color{texifymuted}\VAR{subtitle|md}\par}
+%: endif
+\vspace{4pt}{\color{accent}\rule{\linewidth}{1.2pt}}\par
+\medskip
+
+%: if facts
+\begin{tcolorbox}[colback=texifybg,colframe=texifybg,arc=1.5mm,boxrule=0pt,left=8pt,right=8pt,top=6pt,bottom=6pt]
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{@{}>{\leavevmode\bfseries\color{texifymuted}}p{0.3\linewidth} L@{}}
+%: for label, value in facts.items()
+\VAR{label} & \VAR{value|md} \\
+%: endfor
+\end{tabularx}
+\end{tcolorbox}
+\medskip
+%: endif
+
+\VAR{body}
+
+%: if budget
+\section{\VAR{budget_title or txt.budget}}
+\par\noindent
+\begin{tabularx}{\linewidth}{@{}L r@{}}
+\toprule
+\textbf{\VAR{txt.position}} & \textbf{\VAR{txt.amount}} \\
+\midrule
+%: for b in budget
+\VAR{b.item|md}\BLOCK{if b.note}\newline{\footnotesize\color{texifymuted}\VAR{b.note|md}}\BLOCK{endif} & \VAR{b.amount|money} \\
+%: endfor
+\midrule
+\textbf{\VAR{txt.total}} & \textbf{\VAR{sum_amounts(budget)|money}} \\
+\bottomrule
+\end{tabularx}
+%: endif
+
+%: if signature_line
+\par\vspace{1.8cm}\noindent
+\begin{tabularx}{\linewidth}{@{}p{0.42\linewidth}@{\hspace{0.16\linewidth}}p{0.42\linewidth}@{}}
+\VAR{place}\BLOCK{if place}, \BLOCK{endif}\VAR{date|date} & \\[0.9cm]
+\rule{\linewidth}{0.4pt} & \rule{\linewidth}{0.4pt} \\
+{\small\color{texifymuted}\VAR{txt.place_date}} & {\small\color{texifymuted}\VAR{txt.signature} \VAR{applicant}}
+\end{tabularx}
+%: endif
+\end{document}

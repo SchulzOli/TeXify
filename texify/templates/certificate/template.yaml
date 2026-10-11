@@ -1,0 +1,27 @@
+description: >-
+  Urkunde / Zertifikat / Auszeichnung im Querformat mit Rahmen und Ornamenten:
+  großer Titel, hervorgehobener Name, kurzer Text, Ort/Datum, Zertifikatsnummer
+  und bis zu drei Unterschriften.
+fields:
+  person: {required: true, description: Name der ausgezeichneten Person}
+  title: Titel (Standard 'Zertifikat', z. B. 'Urkunde')
+  subtitle: Untertitel (z. B. Kursname)
+  intro: Satz vor dem Namen (Standard 'Hiermit wird bestätigt, dass')
+  signers: "Unterzeichnende: Liste aus {name, role}"
+  place: Ort
+  date: Datum (Standard heute)
+  number: Zertifikatsnummer
+  logo: Logo-Bilddatei
+  ornaments: Eck-Ornamente anzeigen (true/false)
+defaults:
+  date: today
+  ornaments: true
+strings:
+  de:
+    title: Zertifikat
+    intro: Hiermit wird bestätigt, dass
+    number: Zertifikat-Nr.
+  en:
+    title: Certificate
+    intro: This is to certify that
+    number: Certificate no.

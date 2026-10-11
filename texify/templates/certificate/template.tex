@@ -1,0 +1,67 @@
+\documentclass[fontsize=12pt,paper=a4,paper=landscape,parskip=half]{scrartcl}
+\usepackage[\VAR{lang},\VAR{font}]{texify}
+\usepackage[a4paper,landscape,top=2.6cm,bottom=2.4cm,left=4cm,right=4cm]{geometry}
+\usepackage{tikz}
+\usepackage{pgfornament}
+\texifyaccent{\VAR{accent}}
+\pagestyle{empty}
+
+\hypersetup{pdftitle={\VAR{title or txt.title} -- \VAR{person}}}
+
+\begin{document}
+% ---------------------------------------------------------------- frame
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent,line width=2.4pt]
+    ([shift={(1.1cm,1.1cm)}]current page.south west) rectangle ([shift={(-1.1cm,-1.1cm)}]current page.north east);
+  \draw[accent!60,line width=0.6pt]
+    ([shift={(1.35cm,1.35cm)}]current page.south west) rectangle ([shift={(-1.35cm,-1.35cm)}]current page.north east);
+%: if ornaments
+  \node[anchor=north west] at ([shift={(1.45cm,-1.45cm)}]current page.north west) {\pgfornament[color=accent,width=2.2cm]{63}};
+  \node[anchor=north east] at ([shift={(-1.45cm,-1.45cm)}]current page.north east) {\pgfornament[color=accent,width=2.2cm,symmetry=v]{63}};
+  \node[anchor=south west] at ([shift={(1.45cm,1.45cm)}]current page.south west) {\pgfornament[color=accent,width=2.2cm,symmetry=h]{63}};
+  \node[anchor=south east] at ([shift={(-1.45cm,1.45cm)}]current page.south east) {\pgfornament[color=accent,width=2.2cm,symmetry=c]{63}};
+%: endif
+\end{tikzpicture}
+
+\begin{center}
+%: if logo
+\includegraphics[height=1.5cm]{\VAR{logo|asset}}\par\vspace{0.4cm}
+%: else
+\vspace*{0.6cm}
+%: endif
+{\color{accent}\fontsize{40}{46}\selectfont\bfseries\texifyspaced{\MakeUppercase{\VAR{title or txt.title}}}\par}
+%: if subtitle
+\vspace{6pt}{\Large\color{texifymuted}\VAR{subtitle|md}\par}
+%: endif
+\vspace{0.9cm}
+{\color{texifymuted}\VAR{intro or txt.intro}\par}
+\vspace{0.3cm}
+{\fontsize{30}{36}\selectfont\VAR{person|md}\par}
+\vspace{2pt}{\color{accent}\rule{0.45\linewidth}{0.8pt}}\par
+\vspace{0.4cm}
+\begin{minipage}{0.8\linewidth}
+\centering\setlength{\parskip}{0.5em}
+\VAR{body}
+\end{minipage}
+\end{center}
+
+\vfill
+\noindent
+\begin{minipage}[b]{0.3\linewidth}
+\VAR{place}\BLOCK{if place}, \BLOCK{endif}\VAR{date|date}
+%: if number
+\par{\footnotesize\color{texifymuted}\VAR{txt.number}: \VAR{number}}
+%: endif
+\end{minipage}\hfill
+%: for s in signers
+\begin{minipage}[b]{0.28\linewidth}
+\centering
+\rule{\linewidth}{0.4pt}\par
+{\small \VAR{s.name}}\par
+{\footnotesize\color{texifymuted}\VAR{s.role}}
+\end{minipage}%
+%: if not loop.last
+\hspace{0.04\linewidth}%
+%: endif
+%: endfor
+\end{document}

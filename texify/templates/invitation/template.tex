@@ -1,0 +1,80 @@
+\documentclass[fontsize=11pt,paper=a4,parskip=half]{scrartcl}
+\usepackage[\VAR{lang},\VAR{font}]{texify}
+\usepackage[a4paper,top=1.5cm,bottom=2cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage[most]{tcolorbox}
+\usepackage{tikz}
+\newlength{\bannerheight}
+\setlength{\bannerheight}{7.2cm}
+\texifyaccent{\VAR{accent}}
+\pagestyle{empty}
+
+\hypersetup{pdftitle={\VAR{title}},pdfauthor={\VAR{host}}}
+
+\begin{document}
+% ---------------------------------------------------------------- banner
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[accent] (current page.north west) rectangle ([yshift=-\bannerheight]current page.north east);
+  \node[text width=0.8\paperwidth,align=center,text=white] at ([yshift=-0.55\bannerheight]current page.north) {%
+    {\large\texifyspaced{\MakeUppercase{\VAR{kind or txt.invitation}}}\par}
+    \vspace{10pt}
+    {\fontsize{30}{36}\selectfont\bfseries \VAR{title|md}\par}
+%: if subtitle
+    \vspace{8pt}{\Large \VAR{subtitle|md}\par}
+%: endif
+  };
+\end{tikzpicture}
+\vspace*{\dimexpr\bannerheight-1.5cm+1cm\relax}
+
+% ---------------------------------------------------------------- facts
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{c@{\hspace{1.4cm}}c@{\hspace{1.4cm}}c}
+{\small\color{texifymuted}\texifyspaced{\MakeUppercase{\VAR{txt.when}}}} &
+{\small\color{texifymuted}\texifyspaced{\MakeUppercase{\VAR{txt.time}}}} &
+{\small\color{texifymuted}\texifyspaced{\MakeUppercase{\VAR{txt.where}}}} \\
+{\large\bfseries\color{accent}\VAR{date|date}} &
+{\large\bfseries\color{accent}\VAR{time}} &
+{\large\bfseries\color{accent}\VAR{place_name or place}} \\
+%: if place_name and place
+ & & {\small\color{texifymuted}\VAR{place|lines(', ')}} \\
+%: endif
+\end{tabular}
+\end{center}
+\vspace{0.6cm}
+
+% ---------------------------------------------------------------- text
+\begin{center}
+\begin{minipage}{0.86\linewidth}
+\setlength{\parskip}{0.6em}
+\VAR{body}
+\end{minipage}
+\end{center}
+
+%: if program
+\vspace{0.4cm}
+\begin{center}
+{\bfseries\color{accent}\VAR{txt.program}}\par\smallskip
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}r@{\hspace{1em}}l@{}}
+%: for p in program
+{\color{texifymuted}\VAR{p.time}} & \VAR{p.item|md} \\
+%: endfor
+\end{tabular}
+\end{center}
+%: endif
+
+\vfill
+%: if rsvp or dress_code
+\begin{tcolorbox}[colback=texifybg,colframe=texifybg,arc=1.5mm,boxrule=0pt,halign=center,left=10pt,right=10pt]
+%: if rsvp
+\textbf{\VAR{txt.rsvp}:} \VAR{rsvp|md}
+%: endif
+%: if dress_code
+\par\textbf{\VAR{txt.dress_code}:} \VAR{dress_code|md}
+%: endif
+\end{tcolorbox}
+%: endif
+%: if host
+\begin{center}{\small\color{texifymuted}\VAR{host}}\end{center}
+%: endif
+\end{document}

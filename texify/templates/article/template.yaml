@@ -1,0 +1,15 @@
+description: >-
+  Allgemeines Dokument: Bericht, Konzept, Notiz, Anleitung. Überschriften,
+  Listen, Tabellen und Bilder kommen direkt aus Markdown. Der Titel kommt aus
+  dem Feld title oder der ersten "# Überschrift".
+title_from_heading: true
+fields:
+  title: Titel (alternativ die erste Überschrift "# ...")
+  subtitle: Untertitel
+  author: Autor/in
+  date: Datum (YYYY-MM-DD, 'today' oder freier Text)
+  numbered: Abschnitte nummerieren (true/false)
+  toc: Inhaltsverzeichnis anzeigen (true/false)
+defaults:
+  numbered: false
+  toc: false

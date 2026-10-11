@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - name: Unit tests (compile tests are skipped without a LaTeX engine)
+        run: pytest -q
+      - name: THIRD_PARTY.md up to date
+        run: python scripts/third_party.py --check
+
+  examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - name: Build TeX Live image
+        run: docker build -t texify:latest .
+      - name: Compile tests + all examples
+        env:
+          TEXIFY_ENGINE: docker
+        run: |
+          pytest -q
+          python scripts/build_examples.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: example-pdfs
+          path: examples/pdf/*.pdf

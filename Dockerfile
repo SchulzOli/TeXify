@@ -1,13 +1,20 @@
+# TeXify: TeX Live + texify CLI/MCP in one image.
+#
+#   docker compose build
+#   docker compose run --rm texify build dokumente/brief.md
+#   docker run -i --rm -v "$PWD:/work" texify:latest mcp      # MCP over stdio
+#
+# The local CLI also uses this image as LaTeX engine when no TeX is installed
+# (engine "docker": runs latexmk inside the container).
 FROM python:3.12-slim
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1
 
-# TeX Live (recommended+extra cover tcolorbox, tikz, geometry, titlesec,
-# enumitem, parskip, xcolor, hyperref, helvet, ...) + poppler for pdftotext.
-# texlive-fonts-extra intentionally omitted (624MB, not needed).
-# The deb.debian.org mirror is flaky -> run apt-get in a retry loop (apt resumes).
+# TeX Live: latex-extra covers tcolorbox, paracol, titlesec, ...;
+# fonts-recommended brings TeX Gyre; lang-german for babel ngerman.
+# The deb.debian.org mirror is flaky -> apt-get in a retry loop.
 RUN set -e; \
     for i in 1 2 3 4 5 6 7 8; do \
       apt-get update && \
@@ -17,31 +24,23 @@ RUN set -e; \
         texlive-latex-recommended \
         texlive-latex-extra \
         texlive-fonts-recommended \
+        tex-gyre \
+        texlive-plain-generic \
+        texlive-lang-german \
+        texlive-lang-english \
+        lmodern \
         latexmk \
-        poppler-utils \
       && break; \
       echo "apt attempt $i failed, retrying..."; sleep 5; \
     done; \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir "mcp[cli]>=1.10,<2" python-docx \
-      "fastapi>=0.110" "uvicorn[standard]>=0.29" "python-multipart>=0.0.9" uv || \
-    pip install --no-cache-dir --retries 10 "mcp[cli]>=1.10,<2" python-docx \
-      "fastapi>=0.110" "uvicorn[standard]>=0.29" "python-multipart>=0.0.9"
-
 WORKDIR /app
+COPY pyproject.toml README.md /app/
+COPY texify /app/texify
+RUN pip install --no-cache-dir --retries 10 "/app[mcp,docx]"
 
-COPY core.py /app/core.py
-COPY server.py /app/server.py
-COPY web.py /app/web.py
-COPY static/ /app/static/
-COPY entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
-
-# Documents live here (bind-mounted from the host)
-RUN mkdir -p /data
-VOLUME ["/data"]
-
-EXPOSE 8000
-
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENV TEXIFY_ENGINE=latexmk
+WORKDIR /work
+ENTRYPOINT ["texify"]
+CMD ["--help"]

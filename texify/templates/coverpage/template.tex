@@ -1,0 +1,72 @@
+\documentclass[fontsize=11pt,paper=a4,parskip=half]{scrartcl}
+\usepackage[\VAR{lang},\VAR{font}]{texify}
+\usepackage[a4paper,top=3cm,bottom=2.5cm,left=3cm,right=2.5cm]{geometry}
+\usepackage{tikz}
+\texifyaccent{\VAR{accent}}
+\pagestyle{empty}
+
+\hypersetup{pdftitle={\VAR{title or txt.title} -- \VAR{name}},pdfauthor={\VAR{name}}}
+
+\begin{document}
+% accent bar on the left page edge
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[accent] (current page.north west) rectangle ([xshift=1.2cm]current page.south west);
+\end{tikzpicture}
+
+{\color{texifymuted}\large\texifyspaced{\MakeUppercase{\VAR{title or txt.title}}}\par}
+\vspace{8pt}
+%: if position
+{\fontsize{30}{36}\selectfont\bfseries\color{accent}\VAR{position|md}\par}
+%: endif
+%: if company
+\vspace{10pt}{\Large \VAR{txt.at} \VAR{company|md}\par}
+%: endif
+%: if reference
+\vspace{4pt}{\color{texifymuted}\VAR{txt.reference}: \VAR{reference}\par}
+%: endif
+
+\vspace{1.6cm}
+%: if photo
+\begin{center}
+\begin{tikzpicture}
+  \node[inner sep=0pt] (p) {\includegraphics[width=6cm]{\VAR{photo|asset}}};
+  \draw[accent,line width=1.5pt] (p.south west) rectangle (p.north east);
+\end{tikzpicture}
+\end{center}
+\vspace{1.2cm}
+%: else
+\vspace{3cm}
+%: endif
+
+{\fontsize{22}{27}\selectfont\bfseries \VAR{name}\par}
+%: if headline
+\vspace{4pt}{\large\color{texifymuted}\VAR{headline|md}\par}
+%: endif
+\vspace{6pt}{\color{accent}\rule{0.5\linewidth}{1pt}}\par
+\vspace{4pt}
+{\color{texifymuted}
+%: if contact.address
+\VAR{contact.address|lines}\\
+%: endif
+%: if contact.phone
+\VAR{contact.phone}\\
+%: endif
+%: if contact.email
+\href{mailto:\VAR{contact.email}}{\VAR{contact.email}}\\
+%: endif
+%: if contact.web
+\VAR{contact.web}
+%: endif
+\par}
+
+\vfill
+%: if contents
+{\bfseries\color{accent}\VAR{txt.contents}}\par\smallskip
+\begin{enumerate}[leftmargin=1.6em,itemsep=2pt]
+%: for c in contents
+  \item \VAR{c|md}
+%: endfor
+\end{enumerate}
+%: endif
+\VAR{body}
+\end{document}

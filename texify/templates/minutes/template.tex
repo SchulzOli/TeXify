@@ -1,0 +1,99 @@
+\documentclass[fontsize=11pt,paper=a4,parskip=half]{scrartcl}
+\usepackage[\VAR{lang},\VAR{font}]{texify}
+\usepackage[a4paper,top=2.2cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{scrlayer-scrpage}
+\usepackage[most]{tcolorbox}
+\texifyaccent{\VAR{accent}}
+
+\addtokomafont{disposition}{\color{accent}}
+\clearpairofpagestyles
+\setkomafont{pageheadfoot}{\small\color{texifymuted}}
+\ihead{\VAR{title|md}\BLOCK{if date} -- \VAR{date|date('short')}\BLOCK{endif}}
+\ofoot*{\pagemark}
+\pagestyle{scrheadings}
+
+% agenda items: "# Thema" -> "TOP 1  Thema"
+\newcounter{agendaitem}
+\newcommand{\agendaitem}[1]{%
+  \refstepcounter{agendaitem}\par\bigskip\noindent
+  {\usekomafont{disposition}\large \VAR{txt.item}~\theagendaitem\quad #1}\par
+  \vspace{-4pt}{\color{texifyrule}\rule{\linewidth}{0.5pt}}\par\smallskip}
+\newcommand{\agendasub}[1]{\par\smallskip\noindent\textbf{#1}\par}
+\newcommand{\metarow}[2]{\leavevmode\color{texifymuted}#1 & #2 \\}
+
+\hypersetup{pdftitle={\VAR{title}}}
+
+\begin{document}
+\thispagestyle{plain.scrheadings}
+{\color{texifymuted}\small\bfseries\texifyspaced{\MakeUppercase{\VAR{kind or txt.minutes}}}\par}
+\vspace{4pt}
+{\usekomafont{disposition}\fontsize{22}{27}\selectfont \VAR{title|md}\par}
+\vspace{6pt}{\color{accent}\rule{\linewidth}{1.2pt}}\par\medskip
+
+\begin{tcolorbox}[colback=texifybg,colframe=texifybg,arc=1.5mm,boxrule=0pt,left=8pt,right=8pt,top=6pt,bottom=6pt]
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\linewidth}{@{}>{\leavevmode\bfseries\color{texifymuted}}p{0.24\linewidth} L@{}}
+%: if date
+\VAR{txt.date} & \VAR{date|date}\BLOCK{if time}, \VAR{time}\BLOCK{endif} \\
+%: endif
+%: if place
+\VAR{txt.place} & \VAR{place} \\
+%: endif
+%: if chair
+\VAR{txt.chair} & \VAR{chair} \\
+%: endif
+%: if recorder
+\VAR{txt.recorder} & \VAR{recorder} \\
+%: endif
+%: if attendees
+\VAR{txt.attendees} & \VAR{attendees|texjoin(', ')} \\
+%: endif
+%: if absent
+\VAR{txt.absent} & \VAR{absent|texjoin(', ')} \\
+%: endif
+%: if guests
+\VAR{txt.guests} & \VAR{guests|texjoin(', ')} \\
+%: endif
+\end{tabularx}
+\end{tcolorbox}
+
+%: set agenda = sections | selectattr('raw_title') | list
+%: if agenda
+\medskip
+{\bfseries\color{accent}\VAR{txt.agenda}}\par\smallskip
+\begin{enumerate}[label=\VAR{txt.item}~\arabic*,leftmargin=4em,itemsep=0pt]
+%: for s in agenda
+  \item \VAR{s.title}
+%: endfor
+\end{enumerate}
+%: endif
+
+\VAR{body}
+
+%: if actions
+\par\bigskip\noindent
+{\usekomafont{disposition}\large \VAR{txt.actions}}\par\smallskip
+\noindent
+\begin{tabularx}{\linewidth}{@{}r L l l@{}}
+\toprule
+\textbf{\#} & \textbf{\VAR{txt.task}} & \textbf{\VAR{txt.owner}} & \textbf{\VAR{txt.due}} \\
+\midrule
+%: for a in actions
+\VAR{loop.index} & \VAR{a.task|md} & \VAR{a.owner} & \VAR{a.due|date('short')} \\
+%: endfor
+\bottomrule
+\end{tabularx}
+%: endif
+
+%: if next_meeting
+\par\medskip\noindent\textbf{\VAR{txt.next_meeting}:} \VAR{next_meeting|md}
+%: endif
+
+%: if signatures
+\par\vspace{1.6cm}\noindent
+\begin{tabularx}{\linewidth}{@{}p{0.42\linewidth}@{\hspace{0.16\linewidth}}p{0.42\linewidth}@{}}
+\rule{\linewidth}{0.4pt} & \rule{\linewidth}{0.4pt} \\
+{\small\color{texifymuted}\VAR{chair}, \VAR{txt.chair}} & {\small\color{texifymuted}\VAR{recorder}, \VAR{txt.recorder}}
+\end{tabularx}
+%: endif
+\end{document}

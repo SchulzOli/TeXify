@@ -1,0 +1,54 @@
+\documentclass[version=last,paper=a4,fontsize=11pt,parskip=half,
+  fromalign=right,fromrule=aftername,
+  fromphone=\VAR{'true' if sender.phone else 'false'},
+  fromemail=\VAR{'true' if sender.email else 'false'},
+  fromurl=\VAR{'true' if sender.web else 'false'},
+  foldmarks=true,refline=dateright,enlargefirstpage=true,
+  backaddress=underlined]{scrlttr2}
+\usepackage[\VAR{lang},\VAR{font}]{texify}
+\usepackage{texify-letter}
+\texifyaccent{\VAR{accent}}
+
+\setkomafont{subject}{\bfseries}
+
+\setkomavar{fromname}{\VAR{sender.name}}
+\setkomavar{fromaddress}{\VAR{sender.street}\\\VAR{sender.zip} \VAR{sender.city}}
+\setkomavar{fromphone}{\VAR{sender.phone}}
+\setkomavar{fromemail}{\VAR{sender.email}}
+\setkomavar{fromurl}{\VAR{sender.web}}
+\setkomavar{backaddress}{\VAR{sender.name}\\\VAR{sender.street}\\\VAR{sender.zip} \VAR{sender.city}}
+\setkomavar{place}{\VAR{place or sender.city}}
+\setkomavar{date}{\VAR{date|date}}
+%: if subject
+\setkomavar{subject}{\VAR{subject|md}}
+%: endif
+%: if your_ref
+\setkomavar{yourref}{\VAR{your_ref}}
+%: endif
+%: if your_letter
+\setkomavar{yourmail}{\VAR{your_letter|date('short')}}
+%: endif
+%: if my_ref
+\setkomavar{myref}{\VAR{my_ref}}
+%: endif
+%: if signature
+\setkomavar{signature}{\includegraphics[height=1.3cm]{\VAR{signature|asset}}\\\VAR{sender.name}}
+%: else
+\setkomavar{signature}{\VAR{sender.name}}
+%: endif
+\setkomavar*{enclseparator}{\VAR{txt.enclosures}}
+
+\hypersetup{pdftitle={\VAR{subject}},pdfauthor={\VAR{sender.name}}}
+
+\begin{document}
+\begin{letter}{\VAR{recipient|lines}}
+\opening{\VAR{(opening or txt.opening)|md}}
+
+\VAR{body}
+
+\closing{\VAR{(closing or txt.closing)|md}}
+%: if enclosures
+\encl{\VAR{enclosures|lines}}
+%: endif
+\end{letter}
+\end{document}

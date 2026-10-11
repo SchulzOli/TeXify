@@ -1,0 +1,41 @@
+\documentclass[fontsize=11pt,paper=a4,parskip=half]{scrartcl}
+\usepackage[\VAR{lang},\VAR{font}]{texify}
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{scrlayer-scrpage}
+\texifyaccent{\VAR{accent}}
+
+\addtokomafont{disposition}{\color{accent}}
+\setcounter{secnumdepth}{\VAR{3 if numbered else 0}}
+\setcounter{tocdepth}{2}
+
+\clearpairofpagestyles
+\setkomafont{pageheadfoot}{\small\color{texifymuted}}
+\ofoot*{\pagemark}
+%: if title
+\ihead{\VAR{title|md}}
+%: endif
+\pagestyle{scrheadings}
+
+\hypersetup{pdftitle={\VAR{title}},pdfauthor={\VAR{author}}}
+
+\begin{document}
+%: if title
+\thispagestyle{plain.scrheadings}
+{\usekomafont{disposition}\fontsize{24}{29}\selectfont \VAR{title|md}\par}
+%: if subtitle
+\vspace{6pt}{\Large\color{texifymuted}\VAR{subtitle|md}\par}
+%: endif
+%: if author or date
+\vspace{8pt}{\color{texifymuted}\VAR{author}\BLOCK{if author and date}\enspace|\enspace\BLOCK{endif}\VAR{date|date}\par}
+%: endif
+\vspace{2pt}{\color{accent}\rule{\linewidth}{1.2pt}}\par
+\bigskip
+%: endif
+%: if toc
+\tableofcontents
+\bigskip
+%: endif
+
+\VAR{body}
+
+\end{document}

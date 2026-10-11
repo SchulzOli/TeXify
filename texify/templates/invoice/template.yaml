@@ -1,0 +1,92 @@
+description: >-
+  Rechnung oder Angebot (kind: quote) mit Positionstabelle; Zwischensummen, USt und Gesamtbetrag werden
+  exakt berechnet (Decimal). Enthält die Pflichtangaben nach §14 UStG,
+  optional Kleinunternehmerregelung (§19 UStG). Absender/Bank/Steuernummer
+  am besten in texify.toml [defaults.sender] hinterlegen.
+fields:
+  sender.name: {required: true, description: "Rechnungssteller (texify.toml [defaults.sender])"}
+  sender.street: {required: true, description: Straße + Nr.}
+  sender.zip: {required: true, description: PLZ}
+  sender.city: {required: true, description: Ort}
+  sender.tax_id: Steuernummer (oder sender.vat_id)
+  sender.vat_id: USt-IdNr.
+  sender.bank: "Bankverbindung: {name, iban, bic}"
+  recipient: {required: true, description: "Rechnungsempfänger, mehrzeilig (YAML: recipient: |)"}
+  kind: "invoice (Rechnung, Standard) oder quote (Angebot mit Gültigkeitsdatum)"
+  number: {required: true, description: Rechnungs- bzw. Angebotsnummer}
+  valid_days: Angebot gültig für n Tage (Standard 30)
+  date: Rechnungsdatum (Standard heute)
+  customer_number: Kundennummer
+  service_date: Leistungsdatum
+  service_period: Leistungszeitraum (freier Text, z. B. 'September 2026')
+  items: {required: true, description: "Positionen: Liste aus {desc, qty, unit, price, detail}"}
+  vat: USt-Satz in Prozent (Standard 19)
+  small_business: Kleinunternehmer nach §19 UStG – keine USt (true/false)
+  due_days: Zahlungsziel in Tagen (Standard 14)
+  payment_note: Eigener Zahlungshinweis statt des Standardtexts
+  opening: Anrede
+  closing: Grußformel
+defaults:
+  kind: invoice
+  valid_days: 30
+  date: today
+  vat: 19
+  due_days: 14
+  small_business: false
+headings:
+  1: texifyheading
+strings:
+  de:
+    title_invoice: Rechnung
+    title_quote: Angebot
+    number_invoice: Rechnungsnummer
+    number_quote: Angebotsnummer
+    valid_1: Dieses Angebot ist gültig bis zum
+    valid_2: – wir freuen uns auf Ihren Auftrag.
+    opening: Sehr geehrte Damen und Herren,
+    closing: Mit freundlichen Grüßen
+    pos: Pos.
+    desc: Beschreibung
+    qty: Menge
+    unit_price: Einzelpreis
+    total: Gesamt
+    net: Nettobetrag
+    plus_vat: zzgl.
+    vat: USt.
+    gross: Gesamtbetrag
+    service_date: Leistungsdatum
+    service_period: Leistungszeitraum
+    phone: Tel.
+    tax_id: St.-Nr.
+    vat_id: USt-IdNr.
+    small_business_note: Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.
+    pay_1: Bitte überweisen Sie den Gesamtbetrag von
+    pay_2: bis zum
+    pay_3: unter Angabe der Rechnungsnummer auf das unten genannte Konto.
+  en:
+    title_invoice: Invoice
+    title_quote: Quotation
+    number_invoice: Invoice no.
+    number_quote: Quotation no.
+    valid_1: This quotation is valid until
+    valid_2: – we look forward to your order.
+    opening: Dear Sir or Madam,
+    closing: Kind regards
+    pos: "#"
+    desc: Description
+    qty: Qty
+    unit_price: Unit price
+    total: Amount
+    net: Subtotal
+    plus_vat: plus
+    vat: VAT
+    gross: Total
+    service_date: Date of service
+    service_period: Service period
+    phone: Phone
+    tax_id: Tax no.
+    vat_id: VAT ID
+    small_business_note: No VAT charged (small business, § 19 UStG).
+    pay_1: Please transfer the total amount of
+    pay_2: by
+    pay_3: quoting the invoice number to the account below.

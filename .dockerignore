@@ -1,0 +1,7 @@
+.git
+data
+out
+tests
+**/__pycache__
+*.pdf
+.venv

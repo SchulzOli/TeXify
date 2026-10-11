@@ -2,9 +2,7 @@ services:
   texify:
     build: .
     image: texify:latest
-    container_name: texify
-    ports:
-      - "8000:8000"        # web UI -> http://localhost:8000
     volumes:
-      - ./data:/data       # all documents (PDF/DOCX/TEX/PDF output) live here
-    restart: unless-stopped
+      - ./:/work          # project folder (documents, templates, texify.toml)
+    working_dir: /work
+    stdin_open: true      # needed for `docker compose run --rm texify mcp`

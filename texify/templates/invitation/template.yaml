@@ -1,0 +1,34 @@
+description: >-
+  Einladung zu Veranstaltung, Feier, Jubiläum, Workshop oder
+  Mitgliederversammlung: farbiges Titelband, Datum/Uhrzeit/Ort prominent,
+  Einladungstext, optionaler Ablauf und Rückmeldebox.
+title_from_heading: true
+fields:
+  title: {required: true, description: Name der Veranstaltung (oder erste Überschrift)}
+  subtitle: Untertitel / Anlass
+  kind: Zeile über dem Titel (Standard 'Einladung')
+  date: {required: true, description: Datum}
+  time: Uhrzeit (z. B. '18:00 Uhr')
+  place_name: Name des Ortes (z. B. 'Kulturhaus')
+  place: Adresse, mehrzeilig
+  program: "Ablauf: Liste aus {time, item}"
+  rsvp: Rückmeldung bis / an
+  dress_code: Kleiderordnung
+  host: Gastgeber (Fußzeile)
+strings:
+  de:
+    invitation: Einladung
+    when: Datum
+    time: Uhrzeit
+    where: Ort
+    program: Ablauf
+    rsvp: Rückmeldung
+    dress_code: Dresscode
+  en:
+    invitation: Invitation
+    when: Date
+    time: Time
+    where: Venue
+    program: Programme
+    rsvp: RSVP
+    dress_code: Dress code

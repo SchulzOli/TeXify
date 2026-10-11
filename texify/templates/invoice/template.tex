@@ -1,0 +1,94 @@
+\documentclass[version=last,paper=a4,fontsize=10.5pt,parskip=half,
+  fromalign=right,fromrule=aftername,
+  fromphone=\VAR{'true' if sender.phone else 'false'},
+  fromemail=\VAR{'true' if sender.email else 'false'},
+  foldmarks=true,refline=dateright,enlargefirstpage=true,
+  backaddress=underlined,firstfoot=true]{scrlttr2}
+\usepackage[\VAR{lang},\VAR{font}]{texify}
+\usepackage{texify-letter}
+\texifyaccent{\VAR{accent}}
+%: set t = invoice_totals(items, vat, small_business)
+
+\setkomafont{subject}{\Large\bfseries\color{accent}}
+
+\setkomavar{fromname}{\VAR{sender.name}}
+\setkomavar{fromaddress}{\VAR{sender.street}\\\VAR{sender.zip} \VAR{sender.city}}
+\setkomavar{fromphone}{\VAR{sender.phone}}
+\setkomavar{fromemail}{\VAR{sender.email}}
+\setkomavar{backaddress}{\VAR{sender.name}\\\VAR{sender.street}\\\VAR{sender.zip} \VAR{sender.city}}
+\setkomavar{place}{\VAR{place or sender.city}}
+\setkomavar{date}{\VAR{date|date}}
+%: set doc_title = txt['title_' ~ kind]
+\setkomavar{invoice}{\VAR{number}}
+\setkomavar*{invoice}{\VAR{txt['number_' ~ kind]}}
+%: if customer_number
+\setkomavar{customer}{\VAR{customer_number}}
+%: endif
+\setkomavar{subject}{\VAR{doc_title} \VAR{number}}
+\setkomavar{signature}{\VAR{sender.name}}
+
+\setkomavar{firstfoot}{%
+  \footnotesize\color{texifymuted}%
+  {\color{texifyrule}\rule{\linewidth}{0.4pt}}\par\smallskip
+  \parbox[t]{0.31\linewidth}{\raggedright
+    \VAR{sender.name}\\\VAR{sender.street}\\\VAR{sender.zip} \VAR{sender.city}}\hfill
+  \parbox[t]{0.31\linewidth}{\raggedright
+    \BLOCK{if sender.phone}\VAR{txt.phone}: \VAR{sender.phone}\\\BLOCK{endif}
+    \BLOCK{if sender.email}\VAR{sender.email}\\\BLOCK{endif}
+    \BLOCK{if sender.tax_id}\VAR{txt.tax_id}: \VAR{sender.tax_id}\\\BLOCK{endif}
+    \BLOCK{if sender.vat_id}\VAR{txt.vat_id}: \VAR{sender.vat_id}\BLOCK{endif}}\hfill
+  \parbox[t]{0.31\linewidth}{\raggedright
+    \BLOCK{if sender.bank}\VAR{sender.bank.name}\\
+    IBAN: \VAR{sender.bank.iban}\\
+    BIC: \VAR{sender.bank.bic}\BLOCK{endif}}%
+}
+
+\hypersetup{pdftitle={\VAR{doc_title} \VAR{number}},pdfauthor={\VAR{sender.name}}}
+
+\begin{document}
+\begin{letter}{\VAR{recipient|lines}}
+\opening{\VAR{(opening or txt.opening)|md}}
+
+\VAR{body}
+
+%: if service_period
+\textbf{\VAR{txt.service_period}:} \VAR{service_period}
+%: elif service_date
+\textbf{\VAR{txt.service_date}:} \VAR{service_date|date}
+%: endif
+
+\par\medskip\noindent
+\begin{tabularx}{\linewidth}{@{}r L r l r r@{}}
+\rowcolor{texifybg}
+\textbf{\VAR{txt.pos}} & \textbf{\VAR{txt.desc}} & \textbf{\VAR{txt.qty}} & & \textbf{\VAR{txt.unit_price}} & \textbf{\VAR{txt.total}} \\
+%: for it in t['items']
+\VAR{loop.index} & \VAR{it.desc|md}\BLOCK{if it.detail}\newline{\footnotesize\color{texifymuted}\VAR{it.detail|md}}\BLOCK{endif} & \VAR{it.qty|num} & \VAR{it.unit} & \VAR{it.price|money} & \VAR{it.total|money} \\
+%: endfor
+\midrule
+%: if small_business
+\multicolumn{5}{@{}r}{\textbf{\VAR{txt.gross}}} & \textbf{\VAR{t.gross|money}} \\
+%: else
+\multicolumn{5}{@{}r}{\VAR{txt.net}} & \VAR{t.net|money} \\
+\multicolumn{5}{@{}r}{\VAR{txt.plus_vat} \VAR{t.vat_rate|num}\,\% \VAR{txt.vat}} & \VAR{t.vat|money} \\
+\cmidrule(l){5-6}
+\multicolumn{5}{@{}r}{\textbf{\VAR{txt.gross}}} & \textbf{\VAR{t.gross|money}} \\
+%: endif
+\bottomrule
+\end{tabularx}
+\par\medskip
+
+%: if small_business
+\VAR{txt.small_business_note}
+
+%: endif
+%: if payment_note
+\VAR{payment_note|md}
+%: elif kind == 'quote'
+\VAR{txt.valid_1} \textbf{\VAR{add_days(date, valid_days)|date}} \VAR{txt.valid_2}
+%: else
+\VAR{txt.pay_1} \textbf{\VAR{t.gross|money}} \VAR{txt.pay_2} \textbf{\VAR{add_days(date, due_days)|date}} \VAR{txt.pay_3}
+%: endif
+
+\closing{\VAR{(closing or txt.closing)|md}}
+\end{letter}
+\end{document}

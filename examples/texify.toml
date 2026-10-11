@@ -1,0 +1,24 @@
+# Gemeinsame Vorgaben für alle Beispiele in diesem Ordner (fiktive Daten).
+# Jedes Dokument kann jeden Wert im eigenen Frontmatter überschreiben.
+
+[defaults]
+lang = "de"
+accent = "1F4E79"
+
+[defaults.sender]
+name = "Max Mustermann"
+street = "Musterstraße 1"
+zip = "04109"
+city = "Leipzig"
+phone = "+49 170 1234567"
+email = "max@example.com"
+web = "example.com"
+tax_id = "231/123/45678"
+
+[defaults.sender.bank]
+name = "Musterbank Leipzig"
+iban = "DE12 3456 7890 1234 5678 90"
+bic = "MUSTDEXXX"
+
+[build]
+out_dir = "pdf"

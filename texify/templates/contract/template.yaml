@@ -1,0 +1,37 @@
+description: >-
+  Vertrag (Dienst-, Werk-, Miet-, Kooperations- oder Freelancervertrag):
+  Vertragsparteien, automatisch nummerierte Paragraphen (§ 1, § 2 …) aus den
+  Überschriften, Absätze (1), (2) aus nummerierten Listen und
+  Unterschriftsfelder für alle Parteien.
+title_from_heading: true
+fields:
+  title: {required: true, description: Vertragstitel (oder erste Überschrift "# ...")}
+  subtitle: Untertitel
+  parties: {required: true, description: "Vertragsparteien: Liste aus {role, name, address, rep, signatory, place}"}
+  preamble: Präambel (Markdown)
+  place: Ort für die Unterschriften
+  date: Datum (leer = Linie zum Ausfüllen)
+defaults:
+  font: serif
+headings:
+  1: clause
+  2: subclause
+strings:
+  de:
+    between: "Zwischen"
+    and: "und"
+    hereinafter_pre: "nachfolgend „"
+    hereinafter_post: "“ genannt"
+    represented_by: "vertreten durch"
+    agree: "wird folgender Vertrag geschlossen:"
+    preamble: Präambel
+    page: Seite
+  en:
+    between: "This agreement is made between"
+    and: "and"
+    hereinafter_pre: "hereinafter “"
+    hereinafter_post: "”"
+    represented_by: "represented by"
+    agree: "The parties agree as follows:"
+    preamble: Preamble
+    page: Page

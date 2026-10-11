@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "texify"
+version = "0.2.0"
+description = "Markdown/Text -> LaTeX -> PDF: professionelle Dokumente aus einfachen Textdateien (CLI + MCP)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "markdown-it-py>=3.0",
+  "Jinja2>=3.1",
+  "PyYAML>=6.0",
+  "pypdf>=5.0",
+]
+
+[project.optional-dependencies]
+mcp = ["mcp>=1.10,<2"]
+ai = ["anthropic>=0.79"]
+docx = ["python-docx>=1.1"]
+all = ["texify[mcp,ai,docx]"]
+dev = ["texify[all]", "pytest>=8", "pypdfium2>=4"]
+
+[project.scripts]
+texify = "texify.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["texify"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,30 @@
+description: >-
+  Klassischer tabellarischer Lebenslauf: Zeitraum links, Inhalt rechts.
+  Konvention: "# Abschnitt" für Rubriken, "## Zeitraum | Position, Firma"
+  für Einträge, darunter Stichpunkte. Kompatibel mit cv-cards (gleiches Markdown).
+fields:
+  name: {required: true, description: Vollständiger Name}
+  headline: Zeile unter dem Namen (z. B. Berufsbezeichnung)
+  photo: Bewerbungsfoto (Bilddatei, optional)
+  contact: "Kontakt: {address, phone, email, web, linkedin, github, city}"
+  details: "Persönliche Daten als Liste Label: Wert (z. B. Geburtsdatum: 01.01.1990)"
+  details_title: Überschrift für details (Standard 'Persönliche Daten')
+  signature_line: Ort, Datum und Unterschriftslinie am Ende (true/false)
+  place: Ort für die Unterschriftszeile (Standard contact.city)
+  date: Datum für die Unterschriftszeile
+  date_width: Breite der Zeitraum-Spalte (Standard 3.4cm)
+defaults:
+  date: today
+  date_width: 3.4cm
+  signature_line: false
+headings:
+  1: cvsection
+  2: {cmd: cventry, args: 2, split: "|", pad: start}
+  3: cvsub
+strings:
+  de:
+    cv: Lebenslauf
+    details: Persönliche Daten
+  en:
+    cv: Curriculum Vitae
+    details: Personal details

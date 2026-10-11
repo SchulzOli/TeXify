@@ -1,0 +1,27 @@
+description: >-
+  Moderner zweispaltiger Lebenslauf mit grauen Karten (Seitenleiste +
+  Hauptspalte). Gleiches Markdown wie 'cv': "# Abschnitt", "## Zeitraum |
+  Position, Firma". Welche Abschnitte in die Seitenleiste kommen, steuert
+  das Feld sidebar.
+fields:
+  name: {required: true, description: Vollständiger Name}
+  headline: Zeile unter dem Namen (Standard 'Lebenslauf')
+  photo: Foto (Bilddatei, optional)
+  contact: "Kontakt: {phone, email, address, web, linkedin, github}"
+  sidebar: Liste der Abschnittstitel für die Seitenleiste
+  card_color: Hintergrundfarbe der Karten (Hex, Standard ECECEC)
+defaults:
+  card_color: ECECEC
+headings:
+  1: cvsection
+  2: {cmd: cventry, args: 2, split: "|", pad: start}
+  3: cvsub
+strings:
+  de:
+    cv: Lebenslauf
+    contact: Kontakt
+    sidebar_default: [Kenntnisse, Skills, Sprachen, Über mich, Interessen, Zertifikate]
+  en:
+    cv: Curriculum Vitae
+    contact: Contact
+    sidebar_default: [Skills, Languages, About me, Interests, Certificates]

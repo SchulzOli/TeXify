@@ -1,0 +1,104 @@
+% texify.sty -- shared design layer for all TeXify templates.
+%
+% Usage in a template:   \usepackage[de,sans]{texify}   (options: de|en, sans|serif)
+% Works with pdfLaTeX, XeLaTeX, LuaLaTeX and Tectonic.
+%
+% Provides: fonts, babel, colors (accent, texifytext, texifymuted, texifyrule,
+% texifybg), tables (tabularx + booktabs, column type L), lists (enumitem),
+% code (fancyvrb), strikeout (\sout), links (hyperref) and the helper macros
+% emitted by the Markdown renderer: \texifyrule, \texifyimage, \texifyheading.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{texify}[2026/10/11 TeXify design layer]
+
+\newif\iftexify@serif
+\newif\iftexify@english
+\DeclareOption{de}{\texify@englishfalse}
+\DeclareOption{en}{\texify@englishtrue}
+\DeclareOption{sans}{\texify@seriffalse}
+\DeclareOption{serif}{\texify@seriftrue}
+\ProcessOptions\relax
+
+% ------------------------------------------------------------------ fonts
+\RequirePackage{iftex}
+\ifPDFTeX
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage[utf8]{inputenc}
+  \RequirePackage{textcomp}
+  \RequirePackage{lmodern}
+  \iftexify@serif
+    \RequirePackage{tgpagella}
+  \else
+    \RequirePackage{tgheros}
+    \renewcommand{\familydefault}{\sfdefault}
+  \fi
+\else
+  \RequirePackage{fontspec}
+  \defaultfontfeatures{Ligatures=TeX}
+  \setsansfont{texgyreheros}[Extension=.otf, UprightFont=*-regular,
+    BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+  \iftexify@serif
+    \setmainfont{texgyrepagella}[Extension=.otf, UprightFont=*-regular,
+      BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+  \else
+    \setmainfont{texgyreheros}[Extension=.otf, UprightFont=*-regular,
+      BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+  \fi
+\fi
+\RequirePackage{microtype}
+
+% ------------------------------------------------------------------ language
+\iftexify@english
+  \RequirePackage[english]{babel}
+\else
+  \RequirePackage[ngerman]{babel}
+\fi
+
+% ------------------------------------------------------------------ colors
+\RequirePackage[table]{xcolor}
+\definecolor{accent}{HTML}{1F4E79}
+\definecolor{texifytext}{HTML}{222222}
+\definecolor{texifymuted}{HTML}{6B6B6B}
+\definecolor{texifyrule}{HTML}{BDBDBD}
+\definecolor{texifybg}{HTML}{F1F3F5}
+\newcommand{\texifyaccent}[1]{\definecolor{accent}{HTML}{#1}}
+
+% ------------------------------------------------------------------ building blocks
+\RequirePackage{graphicx}
+\RequirePackage{array}
+\RequirePackage{tabularx}
+\RequirePackage{booktabs}
+\RequirePackage{enumitem}
+\RequirePackage{fancyvrb}
+\RequirePackage[normalem]{ulem}
+\RequirePackage{amssymb}
+
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+% weighted ragged X column: Y{1.4} is 1.4x as wide as an average X column
+\newcolumntype{Y}[1]{>{\raggedright\arraybackslash\hsize=#1\hsize}X}
+\setlist{itemsep=1pt,topsep=3pt,parsep=0pt}
+\setlist[itemize]{label=\textcolor{accent}{\textbullet}}
+
+% horizontal rule (Markdown ---)
+\newcommand{\texifyrule}{\par\medskip\noindent{\color{texifyrule}\rule{\linewidth}{0.4pt}}\par\medskip}
+% image scaled to fit the text block (Markdown ![](...))
+\newcommand{\texifyimage}[1]{\includegraphics[width=\linewidth,height=0.45\textheight,keepaspectratio]{#1}}
+% Markdown block quote: indented, muted, italic
+\renewenvironment{quote}{%
+  \list{}{\leftmargin=1.5em\rightmargin=1.5em\topsep=4pt}%
+  \item\relax\color{texifymuted}\itshape}{\endlist}
+% simple bold run-in heading (used by letter-like templates)
+\newcommand{\texifyheading}[1]{\par\medskip\noindent{\bfseries\color{accent}#1}\par\smallskip}
+% letter-spaced text (headers, labels); engine-aware
+\ifXeTeX
+  \newcommand{\texifyspaced}[1]{{\addfontfeatures{LetterSpace=15}#1}}
+\else
+  \newcommand{\texifyspaced}[1]{\textls[150]{#1}}
+\fi
+
+% ------------------------------------------------------------------ links (load last)
+\RequirePackage{hyperref}
+\hypersetup{colorlinks,urlcolor=accent,linkcolor=texifytext,citecolor=texifytext,
+  pdfcreator={TeXify}}
+\RequirePackage{bookmark}
+
+\endinput

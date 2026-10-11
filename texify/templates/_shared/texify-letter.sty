@@ -1,0 +1,30 @@
+% texify-letter.sty -- common page layout for scrlttr2 based templates
+% (letter, invoice). Load after \usepackage{texify}.
+%
+% Aligns letterhead, address field, reference line, body text and footer
+% on one left edge (2.5 cm) and one right edge (2 cm), DIN 5008 compatible
+% (address field inside the window of DL/C6 envelopes).
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{texify-letter}[2026/10/11 TeXify letter layout]
+
+\RequirePackage[a4paper,left=2.5cm,right=2cm,top=2.5cm,bottom=2.5cm,
+  footskip=1cm]{geometry}
+
+\setplength{firstheadhpos}{2.5cm}
+\setplength{firstheadwidth}{\textwidth}
+\setplength{firstfoothpos}{2.5cm}
+\setplength{firstfootwidth}{\textwidth}
+\setplength{toaddrhpos}{2.5cm}
+\setplength{toaddrwidth}{8.5cm}
+\setplength{refhpos}{2.5cm}
+\setplength{refwidth}{\textwidth}
+
+\setkomafont{fromname}{\color{accent}\LARGE\bfseries}
+\setkomafont{fromrule}{\color{accent}}
+\setkomafont{fromaddress}{\small\color{texifymuted}}
+\setkomafont{backaddress}{\color{texifymuted}}
+\setkomafont{refname}{\scriptsize\color{texifymuted}}
+\setkomafont{pagenumber}{\small\color{texifymuted}}
+\renewcommand*{\raggedsignature}{\raggedright}
+
+\endinput

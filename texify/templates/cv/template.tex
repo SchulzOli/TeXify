@@ -1,0 +1,90 @@
+\documentclass[fontsize=10.5pt,paper=a4,parskip=half]{scrartcl}
+\usepackage[\VAR{lang},\VAR{font}]{texify}
+\usepackage[a4paper,top=1.8cm,bottom=1.8cm,left=2cm,right=2cm]{geometry}
+\texifyaccent{\VAR{accent}}
+\pagestyle{empty}
+\color{texifytext}
+
+% ---------------------------------------------------------------- layout
+% Tabular CV: dates/labels live in a left column of width \cvleft,
+% content (bullets, tables, text) flows in the right column.
+\newlength{\cvleft}
+\setlength{\cvleft}{\VAR{date_width}}
+\newenvironment{cvbody}{%
+  \begin{list}{}{\setlength{\leftmargin}{\cvleft}\setlength{\itemsep}{0pt}%
+    \setlength{\topsep}{0pt}\setlength{\parsep}{3pt}}\item\relax}{\end{list}}
+\setlist[itemize]{leftmargin=1.1em,topsep=2pt,itemsep=1pt}
+\newcommand{\cvsection}[1]{%
+  \par\bigskip\noindent\hspace*{-\cvleft}%
+  \parbox{\dimexpr\linewidth+\cvleft}{%
+    {\color{accent}\large\bfseries\texifyspaced{\MakeUppercase{#1}}}\\[-5pt]%
+    {\color{texifyrule}\rule{\linewidth}{0.6pt}}}\par\smallskip}
+% \leavevmode before \color: otherwise the color special becomes the first
+% "line" of the top-aligned parbox and the date drops below the baseline
+\newcommand{\cvdate}[1]{%
+  \llap{\parbox[t]{\cvleft}{\raggedright\small\leavevmode\color{texifymuted}#1}}}
+\newcommand{\cventry}[2]{\par\smallskip\noindent\cvdate{#1}\textbf{#2}\par}
+\newcommand{\cvitem}[2]{\par\noindent\cvdate{#1}#2\par}
+\newcommand{\cvsub}[1]{\par\smallskip\noindent{\bfseries\color{accent}#1}\par}
+\newif\ifcvfirst\cvfirsttrue
+\newcommand{\cvcontact}[1]{%
+  \ifcvfirst\global\cvfirstfalse\else\enspace{\color{texifyrule}|}\enspace\fi\mbox{#1}}
+
+\hypersetup{pdftitle={\VAR{txt.cv} \VAR{name}},pdfauthor={\VAR{name}}}
+
+\begin{document}
+% ---------------------------------------------------------------- header
+\noindent
+\begin{minipage}[b]{\dimexpr\linewidth-\BLOCK{if photo}3.6cm\BLOCK{else}0pt\BLOCK{endif}}
+  {\color{accent}\fontsize{26}{31}\selectfont\bfseries \VAR{name}\par}
+%: if headline
+  \vspace{4pt}{\large\color{texifymuted}\VAR{headline|md}\par}
+%: endif
+  \vspace{8pt}{\small
+%: if contact.address
+  \cvcontact{\VAR{contact.address}}
+%: endif
+%: if contact.phone
+  \cvcontact{\VAR{contact.phone}}
+%: endif
+%: if contact.email
+  \cvcontact{\href{mailto:\VAR{contact.email}}{\VAR{contact.email}}}
+%: endif
+%: if contact.web
+  \cvcontact{\href{https://\VAR{contact.web}}{\VAR{contact.web}}}
+%: endif
+%: if contact.linkedin
+  \cvcontact{LinkedIn: \VAR{contact.linkedin}}
+%: endif
+%: if contact.github
+  \cvcontact{GitHub: \VAR{contact.github}}
+%: endif
+  \par}
+\end{minipage}%
+%: if photo
+\hfill
+\begin{minipage}[b]{3.2cm}
+  \includegraphics[width=3.2cm]{\VAR{photo|asset}}
+\end{minipage}
+%: endif
+\par\medskip
+{\color{accent}\rule{\linewidth}{1.2pt}}
+
+% ---------------------------------------------------------------- body
+\begin{cvbody}
+%: if details
+\cvsection{\VAR{details_title or txt.details}}
+%: for label, value in details.items()
+\cvitem{\VAR{label}}{\VAR{value|md}}
+%: endfor
+%: endif
+
+\VAR{body}
+
+%: if signature_line
+\par\vspace{1.5cm}\noindent
+\VAR{place or contact.city}\BLOCK{if place or contact.city}, \BLOCK{endif}\VAR{date|date}\par
+\vspace{0.9cm}\noindent\rule{5cm}{0.4pt}\par\noindent{}\VAR{name}
+%: endif
+\end{cvbody}
+\end{document}

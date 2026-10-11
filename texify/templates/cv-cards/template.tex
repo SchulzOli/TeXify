@@ -1,0 +1,76 @@
+\documentclass[fontsize=9.5pt,paper=a4,parskip=half]{scrartcl}
+\usepackage[\VAR{lang},\VAR{font}]{texify}
+\usepackage[a4paper,margin=1.1cm]{geometry}
+\usepackage[most]{tcolorbox}
+\usepackage{paracol}
+\texifyaccent{\VAR{accent}}
+\pagestyle{empty}
+\color{texifytext}
+
+% ---------------------------------------------------------------- design
+% Two-column "card" CV: sidebar (contact + selected sections) and main column.
+\definecolor{cardbg}{HTML}{\VAR{card_color|color}}
+\newtcolorbox{card}{colback=cardbg,colframe=cardbg,arc=2mm,boxrule=0pt,
+  left=7pt,right=7pt,top=6pt,bottom=6pt,before skip=0pt,after skip=9pt,
+  before upper={\raggedright}}
+\newcommand{\cardsection}[1]{%
+  {\color{texifymuted}\bfseries\footnotesize\texifyspaced{\MakeUppercase{#1}}}\par\vspace{-6pt}
+  {\color{texifymuted}\rule{\linewidth}{0.7pt}}\par\vspace{2pt}}
+\newcommand{\cventry}[2]{%
+  \par\smallskip\noindent\textbf{#2}\par
+  \ifx\relax#1\relax\else{\color{texifymuted}\footnotesize #1}\par\fi\vspace{1pt}}
+\newcommand{\cvsub}[1]{\par\smallskip\noindent{\bfseries #1}\par}
+\setlist[itemize]{leftmargin=1.1em,itemsep=1pt,topsep=1pt,parsep=0pt,
+  label=\textcolor{texifymuted}{\textbullet}}
+\setlength{\columnsep}{10pt}
+\columnratio{0.32}
+
+\hypersetup{pdftitle={\VAR{txt.cv} \VAR{name}},pdfauthor={\VAR{name}}}
+
+\begin{document}
+% ---------------------------------------------------------------- header
+\begin{center}
+  {\huge\bfseries\texifyspaced{\MakeUppercase{\VAR{name}}}}\par\vspace{4pt}
+  {\color{texifymuted}\normalsize\texifyspaced{\MakeUppercase{\VAR{headline or txt.cv}}}}
+\end{center}
+\vspace{2pt}
+
+%: set side_keys = (sidebar or txt.sidebar_default) | map('lower') | list
+\begin{paracol}{2}
+% ---------------------------------------------------------------- sidebar
+%: if photo
+\begin{center}\includegraphics[width=0.75\linewidth]{\VAR{photo|asset}}\end{center}
+%: endif
+%: if contact
+\begin{card}
+\cardsection{\VAR{txt.contact}}
+%: for key in ['phone', 'email', 'address', 'web', 'linkedin', 'github']
+%: if contact[key]
+%: if key == 'email'
+\href{mailto:\VAR{contact.email}}{\VAR{contact.email}}\\[3pt]
+%: else
+\VAR{contact[key]|lines}\\[3pt]
+%: endif
+%: endif
+%: endfor
+\end{card}
+%: endif
+%: for s in sections if s.raw_title | lower in side_keys
+\begin{card}
+\cardsection{\VAR{s.title}}
+\VAR{s.body}
+\end{card}
+%: endfor
+
+\switchcolumn
+% ---------------------------------------------------------------- main
+%: for s in sections if s.raw_title | lower not in side_keys
+\begin{card}
+%: if s.raw_title
+\cardsection{\VAR{s.title}}
+%: endif
+\VAR{s.body}
+\end{card}
+%: endfor
+\end{paracol}
+\end{document}

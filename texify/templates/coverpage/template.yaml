@@ -1,0 +1,25 @@
+description: >-
+  Deckblatt für Bewerbungsmappen (oder Angebote/Berichte): Stelle und
+  Unternehmen, optional Foto, Kontaktdaten und Inhaltsverzeichnis der Mappe.
+  Kombinierbar: texify build deckblatt.md anschreiben.md lebenslauf.md -o mappe.pdf
+fields:
+  name: {required: true, description: Vollständiger Name}
+  title: Dokumentart (Standard 'Bewerbung')
+  position: Stelle, z. B. 'Solution Architect'
+  company: Unternehmen
+  reference: Kennziffer der Ausschreibung
+  headline: Zeile unter dem Namen
+  photo: Bewerbungsfoto (Bilddatei)
+  contact: "Kontakt: {address, phone, email, web}"
+  contents: Liste der enthaltenen Unterlagen
+strings:
+  de:
+    title: Bewerbung
+    at: bei
+    reference: Kennziffer
+    contents: Unterlagen
+  en:
+    title: Application
+    at: at
+    reference: Reference
+    contents: Contents

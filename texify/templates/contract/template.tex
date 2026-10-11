@@ -1,0 +1,80 @@
+\documentclass[fontsize=11pt,paper=a4,parskip=half]{scrartcl}
+\usepackage[\VAR{lang},\VAR{font}]{texify}
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{scrlayer-scrpage}
+\texifyaccent{\VAR{accent}}
+
+\clearpairofpagestyles
+\setkomafont{pageheadfoot}{\small\color{texifymuted}}
+\ihead{\VAR{title|md}}
+\ofoot*{\VAR{txt.page} \pagemark}
+\pagestyle{scrheadings}
+
+% "# Vertragsgegenstand" -> centered "§ 1  Vertragsgegenstand"
+\newcounter{clause}
+\newcommand{\clause}[1]{%
+  \refstepcounter{clause}\par\bigskip
+  {\centering\bfseries\color{accent}\S\,\theclause\quad #1\par}\nopagebreak\smallskip}
+\newcommand{\subclause}[1]{\par\smallskip\noindent\textbf{#1}\par}
+% numbered paragraphs inside a clause: (1), (2), ...
+\setlist[enumerate,1]{label=(\arabic*),leftmargin=2.2em,itemsep=3pt}
+\setlist[enumerate,2]{label=\alph*),leftmargin=1.8em}
+
+\hypersetup{pdftitle={\VAR{title}}}
+
+\begin{document}
+\thispagestyle{plain.scrheadings}
+\begin{center}
+{\color{accent}\fontsize{22}{27}\selectfont\bfseries \VAR{title|md}\par}
+%: if subtitle
+\vspace{4pt}{\large\color{texifymuted}\VAR{subtitle|md}\par}
+%: endif
+\end{center}
+\vspace{0.6cm}
+
+\VAR{txt.between}
+\par\medskip
+%: for p in parties
+\noindent
+\begin{tabularx}{\linewidth}{@{\hspace{2em}}L@{}}
+\textbf{\VAR{p.name}}\\
+\VAR{p.address|lines}\\
+%: if p.rep
+\VAR{txt.represented_by} \VAR{p.rep}\\
+%: endif
+\end{tabularx}
+\par
+\hfill{\small\color{texifymuted}-- \VAR{txt.hereinafter_pre}\VAR{p.role}\VAR{txt.hereinafter_post} --}\par
+%: if not loop.last
+\medskip\noindent\VAR{txt.and}\par\medskip
+%: endif
+%: endfor
+\medskip
+\VAR{txt.agree}
+
+%: if preamble
+\par\medskip
+\begin{center}\bfseries\VAR{txt.preamble}\end{center}
+\VAR{preamble|mdblock}
+%: endif
+
+\VAR{body}
+
+% ---------------------------------------------------------------- signatures
+\par\vspace{1.4cm}\nopagebreak
+\noindent
+%: for p in parties
+\begin{minipage}[t]{0.44\linewidth}
+\VAR{p.place or place}\BLOCK{if p.place or place}, \BLOCK{endif}\BLOCK{if date}\VAR{date|date}\BLOCK{else}\rule{2.5cm}{0.4pt}\BLOCK{endif}\par
+\vspace{1.4cm}
+\rule{\linewidth}{0.4pt}\par
+{\small \VAR{p.signatory or p.name}}\par
+{\footnotesize\color{texifymuted}\VAR{p.role}}
+\end{minipage}%
+%: if loop.index is odd and not loop.last
+\hfill
+%: else
+\par\vspace{1cm}\noindent
+%: endif
+%: endfor
+\end{document}
